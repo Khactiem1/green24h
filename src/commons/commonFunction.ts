@@ -569,6 +569,28 @@ class CommonFunction {/**
 		return menuList.filter((item) => !idsToDelete.has(item[idField]));
 	}
 
+	shortkeyPushView(el) {
+		if (!window.shortkeyView) {
+			window.shortkeyView = [];
+		}
+		window.shortkeyView.remove(el);
+		window.shortkeyView.push(el);
+	}
+
+	shortkeyPopView(el) {
+		window.shortkeyView.remove(el);
+	}
+
+	/**
+	 * Kiểm tra đối tượng có class style không
+	 */
+	hasClass(element, className) {
+		if (element && element.className) {
+			return element.className.indexOf(className) > -1;
+		}
+		return false;
+	}
+
 	/**
 	 * Kiểm tra 2 đối tượng có phải là cha con của nhau không
 	 */

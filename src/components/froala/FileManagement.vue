@@ -11,14 +11,14 @@
           <div class="form-detail">
             <div v-if="listImageUrl?.length" class="lst-user">
               <div class="user-item flex justify-between" v-for="(item, index) in listImageUrl" :key="item">
-                <div class="img"><img :src="item" alt=""> {{ item }}</div>
-                <div @click="deleteRow(item, index, 'img')" :title="$t('i18nCommon.delete')" class="fa-solid fa-xmark color-icon-primary"></div>
+                <div class="img" @dblclick="handleInsertMedia(item, 'image')"><img :src="item" alt=""> {{ item }}</div>
+                <div @click="deleteRow(item, index, 'img')" :title="$t('i18nCommon.delete')" class="fa-solid fa-trash color-icon-primary"></div>
               </div>
             </div>
             <div v-if="listVideoUrl?.length" class="lst-user">
               <div class="user-item flex justify-between" v-for="(item, index) in listVideoUrl" :key="item">
-                <div class="img"><video :src="item" alt=""></video> {{ item }}</div>
-                <div @click="deleteRow(item, index, 'video')" :title="$t('i18nCommon.delete')" class="fa-solid fa-xmark color-icon-primary"></div>
+                <div class="img" @dblclick="handleInsertMedia(item, 'video')"><video :src="item" alt=""></video> {{ item }}</div>
+                <div @click="deleteRow(item, index, 'video')" :title="$t('i18nCommon.delete')" class="fa-solid fa-trash color-icon-primary"></div>
               </div>
             </div>
           </div>
@@ -98,7 +98,7 @@ export default defineComponent({
       if (!editor.value?.$refs?.froala) return;
 
       const refEditor = editor.value.$refs.froala;
-      let htmlContent = refEditor.value; // Lấy nội dung hiện tại của Froala
+      let htmlContent = refEditor?.modelValue; // Lấy nội dung hiện tại của Froala
 
       // Xóa ảnh khỏi nội dung HTML
       const parser = new DOMParser();
@@ -112,41 +112,73 @@ export default defineComponent({
 
       // Cập nhật lại nội dung Froala sau khi xóa ảnh
       const updatedHtml = doc.body.innerHTML;
-      refEditor.model = updatedHtml;
-      if(typeof refEditor?.updateValue === 'function'){
-        refEditor.updateValue();
+      if(typeof editor.value?.editorInstance?.setEditorValue === 'function'){
+        editor.value.editorInstance.setEditorValue(updatedHtml);
       }
-      if(typeof refEditor?.updateModel === 'function'){
-        refEditor.updateModel();
+    };
+
+    /**
+     * Xử lý insert hình ảnh, video
+     */
+    const handleInsertMedia = (path, type) => {
+      if(typeof editor.value?.editorInstance?.execCommand === 'function' && type == 'image'){
+        editor.value.editorInstance.execCommand('insertImage', true, path);
       }
+      else if (typeof editor.value?.editorInstance?.selection?.insertHTML === 'function'){
+        editor.value.editorInstance.selection.insertHTML(`
+          <video src="${path}" 
+            width="300" 
+            height="300" 
+            controls
+            playsinline autoplay
+          >
+            Video không thể phát. Vui lòng kiểm tra lại!
+          </video>
+        `);
+      }
+      hide();
     };
 
     /**
     * Get all hình ảnh ra
     */
     const handleGetAllImages = () => {
-      if(editor.value?.$refs?.froala){
-        const refEditor = editor.value.$refs?.froala;
-        const htmlContent = refEditor.value;
-        const imageUrls = extractImages(htmlContent as string, 'img');
-        const videoUrls = extractImages(htmlContent as string, 'video');
-        if(imageUrls?.length){
-          listImageUrl.value = imageUrls;
-        }
-        if(videoUrls?.length){
-          listVideoUrl.value = videoUrls;
-        }
-      }
-    };
+      const me = proxy;
+      if(editor.value.pathMedia){
+        me.$ms.commonFn.mask();
+        fileAPI.getAllFileInPath(editor.value.pathMedia)
+        .then((res: any) => {
+          if(res?.Data?.length){
+            const imageUrls = [];
+            const videoUrls = [];
+            res.Data.forEach(fileName => {
+              // Lấy phần mở rộng của file
+              const ext = fileName.split('.').pop().toLowerCase();
 
-    /**
-     * parse hình ảnh ra
-     */
-    const extractImages = (htmlContent: string, type: string) => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(htmlContent, 'text/html');
-      const images = doc.querySelectorAll(type);
-      return Array.from(images).map((img: any) => img.src);
+              // Định dạng ảnh
+              const imageExtensions = ["png", "jpg", "jpeg", "gif", "webp", "bmp"];
+              // Định dạng video
+              const videoExtensions = ["mp4", "avi", "mov", "mkv", "webm", "flv"];
+
+              // Phân loại file vào mảng tương ứng
+              if (imageExtensions.includes(ext)) {
+                imageUrls.push(fileAPI.getFileViewUrl(`${editor.value.pathMedia}/${fileName}`));
+              } else if (videoExtensions.includes(ext)) {
+                videoUrls.push(fileAPI.getFileViewUrl(`${editor.value.pathMedia}/${fileName}`));
+              }
+            });
+            if(imageUrls?.length){
+              listImageUrl.value = imageUrls;
+            }
+            if(videoUrls?.length){
+              listVideoUrl.value = videoUrls;
+            }
+          }
+        })
+        .finally(() => {
+          me.$ms.commonFn.unmask();
+        });
+      }
     };
 
      /**
@@ -169,6 +201,7 @@ export default defineComponent({
       listVideoUrl,
       deleteRow,
       beforeOpen,
+      handleInsertMedia,
     };
   },
 });
@@ -198,6 +231,7 @@ export default defineComponent({
     height: 50px;
     display: flex;
     align-items: center;
+    cursor: pointer;
     img,video{
       height: 100%;
       margin-right: 12px;

@@ -130,15 +130,7 @@ export default defineComponent({
 			default: null,
 		},
 		/**
-		 * Trường làm text hiển thị dạng code - name
-		 */
-		suffixDisplayField: {
-			type: String,
-			default: null,
-		},
-		/**
 		 * Trường giá trị ngăn cách
-		 * HTHIEP 01.07.2022
 		 */
 		seperateChar: {
 			type: String,
@@ -146,7 +138,6 @@ export default defineComponent({
 		},
 		/**
 		 * Trường làm text display
-		 * CreatedBy LTDAT 15.06.2020
 		 */
 		displayField: {
 			type: String,
@@ -261,7 +252,6 @@ export default defineComponent({
 	computed: {
 		/**
 		 * data source cho tooltip
-		 * created by ntphong 29/5/2021
 		 */
 		tooltipDataSource() {
 			const me = this;
@@ -302,7 +292,6 @@ export default defineComponent({
 			internalSelectedItem: null,
 			typeAheadPointer: -1,
 			focused: false,
-			//ĐVThi  03/03/2021
 			//kích thước mặc định của itemSize của combox khi được dùng trên lưới Editor
 			gridItemSize: 48,
 			tooltipLeft: 0,
@@ -350,9 +339,7 @@ export default defineComponent({
 							me.updateInternalDataSource()
 						}
 					}
-					//bttu: Chỉ cập nhật dữ liệu mới khi nó khác dữ liệu cũ
 					if (!me.checkTwoArrayAreTheSame(newVal, oldVal) && !me.checkTwoArrayAreTheSame(newVal, me.internalDataSource)) {
-						//TVThai.
 						me.initData();
 						//@nktiem: me.internalDataSource != newVal (ko hiểu đk này làm gì, gây lỗi hiển thị không có dữ liệu, tạm thời bỏ đk này đi) Bug 24383
 						if (!(me.internalDataSource.length === 0 && newVal.length === 0)) {
@@ -407,12 +394,9 @@ export default defineComponent({
 			},
 		},
 
-
 		/**
 		 * Theo dõi sự thay đổi của value
 		 * Phục vụ mục đích binding 2 chiều
-		 *
-		 * @author nvtoan1 - 24.5.2023
 		 */
 		modelValue: {
 			immediate: true,
@@ -515,8 +499,6 @@ export default defineComponent({
 		},
 		/**
 		 * Hàm xử lý update combo theo v-model
-		 *
-		 * @author nvtoan1 - 24.5.2023
 		 */
 		doSelectValue(value) {
 			let me = this,
@@ -524,15 +506,6 @@ export default defineComponent({
 			if (me.isValid(item)) {
 				me.setInternalItem(item, true);
 			}
-		},
-		/**
-		 * Kiểm tra store rỗng hay không
-		 *
-		 * @author nvtoan1 - 24.5.2023
-		 */
-		isStoreEmpty() {
-			let me = this;
-			return me._allData == null || me._allData.length === 0;
 		},
 		/**
 		 * Hàm kiểm tra giá trị hợp lệ
@@ -549,7 +522,6 @@ export default defineComponent({
 		},
 		/**
 		 * kiểm tra xem dữ liệu trên combobox có trống hay không
-		 * @author tmchi 16.04.2021
 		 */
 		isNullOrEmptyvalue() {
 			if (this.modelValue == null || this.modelValue == {}) {
@@ -560,7 +532,6 @@ export default defineComponent({
 		},
 		/**
 		 * Bắt sự kiện khi scroll trên chương trình thì đóng combobox lại
-		 * Created by LTDAT
 		 */
 		scrollEvent() {
 			const me = this;
@@ -570,7 +541,6 @@ export default defineComponent({
 		},
 		/**
 		 * Mặc định chọn giá trị theo index ban đầu
-		 * Created by LTDAT
 		 */
 		setInitIndex() {
 			const me = this;
@@ -581,7 +551,6 @@ export default defineComponent({
 		},
 		/**
 		 * Set giá trị hiện thị ban đầu cho combobox khi combo chưa có dữ liệu
-		 * Created by LTDAT(25.06.2020)
 		 */
 		setInitText(val) {
 			const me = this;
@@ -589,7 +558,6 @@ export default defineComponent({
 		},
 		/**
 		 * Thực hiện query dữ liệu, có thể từ local hoặc remote tùy theo cấu hình
-		 * CreatedBy LTDAT 11/12/2019
 		 */
 		doQueryInternal(searchString, expand) {
 			let me = this,
@@ -600,7 +568,6 @@ export default defineComponent({
 				return false;
 			}
 			//Đoạn này check xem nếu khác querystring thì thực hiện load data từ server
-			// nhgiang4 - 13.11.202333: Xử lý trường hợp combo chủ động load lại data khi đã load trước đó rồi
 			if (me.lastQueryString == queryString && !me.reload) {
 				if (expand) {
 					me.expand();
@@ -633,7 +600,6 @@ export default defineComponent({
 
 		/**
 		 * Xử lý sau khi query xong dữ liệu
-		 * CreatedBy LTDAT 24.06.2020
 		 */
 		afterQuery(expand) {
 			const me = this;
@@ -643,7 +609,6 @@ export default defineComponent({
 		},
 		/**
 		 * Query dữ liệu api
-		 * CreatedBy LTDAT 24.06.2020
 		 */
 		doRemoteQuery(queryString) {
 			//Build filter,
@@ -653,47 +618,17 @@ export default defineComponent({
 			return new Promise((resolve, reject) => {
 				try {
 					if (queryString) {
-						const filterQuery = {};
 						const fields = Object.keys(filterFields);
-						//HTHIEP 01.07.2022: Xử lý query trường hợp có subffix
-						if (queryString && me.suffixDisplayField && queryString.contains(me.seperateChar)) {
-							let queryStrings = queryString.trim().split(me.seperateChar);
-							let filter = {
-								Field: fields[0],
-								Operator: filterFields[fields[0]],
-								Value: queryStrings[0].trim(),
-							};
-							filters.push([filter.Field, filter.Operator, filter.Value]);
-							if (fields.length > 1) {
-								for (let i = 1; i < fields.length; i++) {
-									filters.push('or');
-									filters.push([fields[i], filterFields[fields[i]], queryStrings[0].trim()]);
-								}
-							}
-							for (let i = 1; i < queryStrings.length; i++) {
-								const queryValue = queryStrings[i];
-								if (queryValue) {
-									filters.push('or');
-									filters.push([fields[i], filterFields[fields[0]], queryValue.trim()]);
-									if (fields.length > 1) {
-										for (let i = 1; i < fields.length; i++) {
-											filters.push([fields[i], filterFields[fields[i]], queryValue.trim()]);
-										}
-									}
-								}
-							}
-						} else {
-							let filter = {
-								Field: fields[0],
-								Operator: filterFields[fields[0]],
-								Value: queryString,
-							};
-							filters.push([filter.Field, filter.Operator, filter.Value]);
-							if (fields.length > 1) {
-								for (let i = 1; i < fields.length; i++) {
-									filters.push('or');
-									filters.push([fields[i], filterFields[fields[i]], queryString.trim()]);
-								}
+						let filter = {
+							Field: fields[0],
+							Operator: filterFields[fields[0]],
+							Value: queryString,
+						};
+						filters.push([filter.Field, filter.Operator, filter.Value]);
+						if (fields.length > 1) {
+							for (let i = 1; i < fields.length; i++) {
+								filters.push('or');
+								filters.push([fields[i], filterFields[fields[i]], queryString.trim()]);
 							}
 						}
 					}
@@ -704,8 +639,6 @@ export default defineComponent({
 					if (filters.length > 0) {
 						payload.Filter = JSON.stringify(filters);
 					}
-
-					// nhgiang4 - 26.09.2023: truyền thêm giá trị đã select để get paging
 					if (me.modelValue && me.valueField) {
 						payload.CustomParam = {
 							SelectedValue: me.modelValue,
@@ -730,10 +663,6 @@ export default defineComponent({
 						me.buildFilter(payload);
 					}
 					me.loading = true;
-					// dqduy xử lý riêng cho ô mã số thuế ở detail nhà cung cấp
-					if (columns.includes('taxCode') && queryString == '') {
-						me.loading = false;
-					}
 					me.$emit('comboboxLoadData', payload);
 					resolve();
 				} catch (error) {
@@ -743,7 +672,6 @@ export default defineComponent({
 		},
 		/**
 		 * Query dữ liệu local
-		 * CreatedBy LTDAT 24.06.2020
 		 */
 		doLocalQuery(queryString) {
 			const me = this;
@@ -842,13 +770,11 @@ export default defineComponent({
 
 		/**
 		 * Lấy chuỗi cần query, trường hợp number thì lấy value bỏ qua ký tự phân cách
-		 * CreatedBy LTDAT 11/12/2019
 		 */
 		getQueryString() {
 			return (this.internalText || '').trim();
 		},
 		//Click ra ngoài combo đóng combo lại
-		//Created by LTDAT 18.06.2020
 		click_out(e) {
 			const me = this;
 			if (!me.$ms.commonFn.hasParent(e.target, me.$el) && me.$refs.dropdownPanel && me.$refs.dropdownPanel.$el && !me.$ms.commonFn.hasParent(e.target, me.$refs.dropdownPanel.$el)) {
@@ -886,17 +812,12 @@ export default defineComponent({
 			}
 		},
 		//Sự kiện nhập liệu trên input
-		//Created by LTDAT (16.06.2020)
 		onInput() {
 			const me = this;
 			me._typing = true;
-			//TVTHAI: 11.8.2023: gán thằng này bằng null để trong watch(data) không selected giá trị cũ nữa
 			me.internalValue = null;
-			// me.$emit('update:modelValue', me.internalValue);
-			//kdlong 27.06.2023 fixbug 17076
 			if (!me.expanded && !(me.internalSelectedItem && !me.internalText)) {
 				me.expand();
-				// me.doQueryInternal(me.getQueryString(), true);
 			} else if (!me.expanded && me.internalSelectedItem && !me.internalText) {
 				let metaData = {
 					oldData: me.internalSelectedItem,
@@ -918,7 +839,6 @@ export default defineComponent({
 				me.oldItemSelected = null;
 			}
 
-			// nhgiang4 - 22.06.2023: Khi người dùng nhập tìm kiếm có dấu cách thì trim giá trị để tìm kiếm - fixbug 15396
 			me.doQuery(me.internalText?.trim(), true);
 			me._typing = false;
 			if (!me.rules.some((x) => x.name === me.$ms.constant.ValidateRule.ForceSelection) && me.valueField === me.displayField) {
@@ -929,7 +849,6 @@ export default defineComponent({
 			me.adjustScroll();
 		},
 		//Sự kiện click vào input
-		//Created by NNLAM (19/04/2021)
 		onClick(e) {
 			let el = this.$refs['input'];
 			if (el) {
@@ -943,13 +862,11 @@ export default defineComponent({
 			this.triggerClick(e);
 		},
 		//Sự kiện focus vào input
-		//Created by LTDAT (16.06.2020)
 		onFocus() {
 			const me = this;
 			me.focused = true;
 		},
 		//Sự kiện change input
-		//Created by LTDAT (16.06.2020)
 		//Tạm rem hàm này, chưa hiểu làm gì
 		onChange(e) {
 			let me = this,
@@ -964,8 +881,6 @@ export default defineComponent({
 			}
 		},
 		//Sự kiện blur input
-		//Created by LTDAT (16.06.2020)
-		// pvduy 07/05/2021: sửa lại combobox (đã trao đổi với SA anh BNDuc)
 		onBlur(e) {
 			const me = this;
 			me.focused = false;
@@ -978,7 +893,6 @@ export default defineComponent({
 			me.$emit('blur', e);
 		},
 		//Sự kiện keydown input
-		//Created by LTDAT (16.06.2020)
 		onKeydown(e) {
 			const me = this;
 			// e.stopPropagation();
@@ -1102,7 +1016,6 @@ export default defineComponent({
 		/**
 		 * Tìm item theo text truyền vào
 		 * @param source nếu có source thì sẽ tiến hành lấy từ source ko lấy từ internalDataSource
-		 * HTHIEP 01.07.2022
 		 */
 		findItemByText(queryText, source) {
 			if (!queryText) return false;
@@ -1116,9 +1029,6 @@ export default defineComponent({
 			if (!data || data.length === 0) return false;
 			return data.filter((item) => {
 				let text = item[this.displayField];
-				if (item[this.suffixDisplayField]) {
-					text = `${item[this.suffixDisplayField]} ${this.seperateChar} ${item[this.displayField]}`;
-				}
 				if (queryText === text) {
 					return item;
 				}
@@ -1199,7 +1109,6 @@ export default defineComponent({
 		},
 		/**
 		 * Di chuyển view đến bản ghi nếu cần
-		 * @param {Bản ghi cần view} index
 		 */
 		adjustScroll(typeAheadPointer = this.typeAheadPointer) {
 			const row = this.$refs['dropdownPanel']?.$el?.querySelector('.combobox-item');
@@ -1208,7 +1117,6 @@ export default defineComponent({
 				const rowHeight = row.getBoundingClientRect().height;
 				let scroller = this.getScroller();
 				if (scroller) {
-					// scroller.scrollToItem(typeAheadPointer, true);
 					scroller.scrollTop = Number.parseInt(rowHeight) * typeAheadPointer;
 				}
 			}
@@ -1216,26 +1124,6 @@ export default defineComponent({
 		onScrollerVisible() {
 			const me = this;
 			me.adjustScroll();
-		},
-		/**
-		 * Hàm này phục vụ nghiệp vụ đưa item đc chọn lên đầu
-		 * Trước khi tạo hàm này đang gặp vấn đề nếu chọn item gần cuối của danh sách thì sẽ k đẩy dc item đó lên đầu vì thanh scroll đã chạm limit
-		 * Do đó sẽ check choát các kiểu, nếu rơi vào trường hợp trên thì sẽ load data sau khi chọn item, để lần sau mở lên item bay dc lên đầu
-		 */
-		maybeLoadDataForScroll(typeAheadPointer = this.typeAheadPointer) {
-			const row = this.$refs['dropdownPanel']?.$el?.querySelector('.combobox-item');
-			if (row) {
-				const rowHeight = row.getBoundingClientRect().height;
-				let scroller = this.getScroller();
-				let maxHeightCurrItems = this.getMaxHeiCurrItems();
-				if (scroller) {
-					// scroller.scrollToItem(typeAheadPointer, true);
-					let scrollTop = Number.parseInt(rowHeight) * typeAheadPointer;
-					if (maxHeightCurrItems.scrollHeight - scrollTop < scroller.clientHeight - 2) {
-						this.dropdownScrollEnd();
-					}
-				}
-			}
 		},
 		//Hàm xử lý khi chọn item trên dropdown
 		async onItemClick(item, event) {
@@ -1247,7 +1135,6 @@ export default defineComponent({
 				return;
 			}
 			me.setInternalItem(item);
-			me.maybeLoadDataForScroll();
 			if (me.$refs.input) {
 				me.$refs.input.focus();
 				me.$refs.input.select();
@@ -1256,7 +1143,6 @@ export default defineComponent({
 		},
 		/**
 		 * Xử lý set text khi chọn 1 item
-		 * @author bttu 5.6.2023
 		 * isNotUserSelected: Có là người dùng chọn hay không
 		 */
 		setInternalItem(item, isNotUserSelected) {
@@ -1271,17 +1157,8 @@ export default defineComponent({
 				oldItems = Object.assign({}, me.internalSelectedItem);
 				me.internalSelectedItem = item;
 				me.internalValue = item[me.valueField];
-
-				// HTHIEP: Trường hợp có suffix thì view mang lên cả suffix
-				if (me.suffixDisplayField) {
-					me.internalText = `${item[me.suffixDisplayField]} ${me.seperateChar} ${item[me.displayField]}`;
-					me.$emit('update:suffixDisplay', item[me.suffixDisplayField]);
-				} else {
-					me.internalText = item[me.displayField];
-				}
-
+				me.internalText = item[me.displayField];
 				me.$emit('update:display', item[me.displayField]);
-
 				me.$emit('update:modelValue', me.internalValue); // NOTE: Update value sau khi update display mục đích để ghi đè giá trị trong TH là combo Enum
 				me.typeAheadPointer = me.findIndexItem(item);
 				if (!isNotUserSelected) {
@@ -1300,7 +1177,6 @@ export default defineComponent({
 		//Tìm vị trị của item trong data
 		findIndexItem(item) {
 			const me = this;
-			//TVTHAI: 12.1.2024 Với combobox enum, luồng code chạy không giữ nguyên loại Object mà khởi tạo lại nên check _item == item bị sai => chỉ cần check bằng enumValue
 			if(me.loadEnumSource) {
 				return me.internalDataSource.findIndex((_item) => {
 					return _item.enumValue == item.enumValue;
@@ -1327,7 +1203,6 @@ export default defineComponent({
 			const dataQuery = this.queryMode === 'remote' ? this.internalDataSource : this._allData;
 			const validData = data.filter((x) => !dataQuery.some((y) => y[this.valueField] === x[this.valueField]));
 			appendHead ? this.internalDataSource.unshift(...validData) : this.internalDataSource.append(validData);
-			//TVTHAI 6.2.2023: Cập nhật lại data chuyền từ ngoài vào
 			this.$emit('update:data', this.internalDataSource);
 		},
 		//Khởi tạo dữ liệu
@@ -1350,8 +1225,6 @@ export default defineComponent({
 		updateInternalDataSource(){
 			let me = this;
 			if (me.lastRequestParam && me.lastRequestParam.pageAppend) {
-				// if(me.internalDataSource.filter(i=>i==))
-				// me.internalDataSource.append(me.data);
 				me.appendData(me.data);
 				//nếu dữ liệu trả về ít hơn mong đợi -> đánh dấu kết thúc để khi scroll xuống k load thêm nữa
 				if (me.data.length < me.pageSize) {
@@ -1424,8 +1297,6 @@ export default defineComponent({
 			me.loading = false;
 
 			me.$emit('beforeExpand', me);
-			// vvkeit - 06.04.2021: 89823 - Lỗi chung: Lỗi trên form điều chuyển hàng loạt dưới bảng chi tiết khi đã chọn tài sản thì đang không xổ combo để chọn tiếp
-			// me.$refs.input.focus();
 			me.changeDropdownPosition();
 			me.doHightlightItem();
 			if (me.queryMode == 'local') {
@@ -1457,7 +1328,6 @@ export default defineComponent({
 		},
 		/**
 		 * Hàm set vị trí cho dropdown menu khi expand
-		 * TODO: Chưa xử lý khi có scroll
 		 */
 		changeDropdownPosition() {
 			let me = this,
@@ -1504,7 +1374,6 @@ export default defineComponent({
 		 * Validate khi blur
 		 */
 		validateBlur() {
-			//TODO Tạm thời xóa validate do chưa kiểm soát được
 			let me = this;
 			this.validate(this);
 		},
@@ -1531,8 +1400,6 @@ export default defineComponent({
 					me.internalDataSource = me.internalDataSource || [];
 					let start = me.internalDataSource.length;
 					let count = Math.min(data.length, me.pageSize + start);
-					// const appendData = data.slice(start, count);
-					// me.appendData(appendData);
 					for (let i = start; i < count; i++) {
 						me.internalDataSource.push(data[i]);
 					}

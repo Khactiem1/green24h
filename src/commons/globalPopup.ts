@@ -2,62 +2,66 @@ import { type App, defineAsyncComponent } from "vue";
 
 /** Phần popup phân hệ */
 
-/** Dictionary */
-const EmployeeDetail = defineAsyncComponent(() => import('@/views/dictionary/employee/EmployeeDetail.vue'));
-
 /** Business */
-const BannerDetail = defineAsyncComponent(() => import('@/views/business/banner/BannerDetail.vue'));
-const NewsDetail = defineAsyncComponent(() => import('@/views/business/news/NewsDetail.vue'));
-const NewsListDetail = defineAsyncComponent(() => import('@/views/business/newsList/NewsListDetail.vue'));
-const FooterDetail = defineAsyncComponent(() => import('@/views/business/footer/FooterDetail.vue'));
-const MenuFontendDetail = defineAsyncComponent(() => import('@/views/business/menuFrontend/MenuFontendDetail.vue'));
-const QuickLinkDetail = defineAsyncComponent(() => import('@/views/business/quickLink/QuickLinkDetail.vue'));
-const BankDetail = defineAsyncComponent(() => import('@/views/business/bank/BankDetail.vue'));
-const DepartmentDetail = defineAsyncComponent(() => import('@/views/business/department/DepartmentDetail.vue'));
-const AnoucementDetail = defineAsyncComponent(() => import('@/views/business/anoucement/AnoucementDetail.vue'));
-const SupportListDetail = defineAsyncComponent(() => import('@/views/business/supportList/SupportListDetail.vue'));
-const PositionDetail = defineAsyncComponent(() => import('@/views/business/position/PositionDetail.vue'));
-const SupportDetail = defineAsyncComponent(() => import('@/views/business/support/SupportDetail.vue'));
-const ContactDetail = defineAsyncComponent(() => import('@/views/business/contact/ContactDetail.vue'));
-const CompanyInfoDetail = defineAsyncComponent(() => import('@/views/business/companyInfo/CompanyInfoDetail.vue'));
-const ProvinceDetail = defineAsyncComponent(() => import('@/views/business/province/ProvinceDetail.vue'));
-const DistrictDetail = defineAsyncComponent(() => import('@/views/business/district/DistrictDetail.vue'));
-const WardDetail = defineAsyncComponent(() => import('@/views/business/ward/WardDetail.vue'));
-const CategoryDetail = defineAsyncComponent(() => import('@/views/business/category/CategoryDetail.vue'));
-const PaymentMethodDetail = defineAsyncComponent(() => import('@/views/business/paymentMethod/PaymentMethodDetail.vue'));
-const BrandDetail = defineAsyncComponent(() => import('@/views/business/brand/BrandDetail.vue'));
-const StaffDetail = defineAsyncComponent(() => import('@/views/business/staff/StaffDetail.vue'));
+const BannerDetail = defineAsyncComponent(() => import('@/views/bus/banner/BannerDetail.vue'));
+const NewsDetail = defineAsyncComponent(() => import('@/views/bus/news/NewsDetail.vue'));
+const NewsListDetail = defineAsyncComponent(() => import('@/views/bus/newsList/NewsListDetail.vue'));
+const FooterDetail = defineAsyncComponent(() => import('@/views/bus/footer/FooterDetail.vue'));
+const MenuFontendDetail = defineAsyncComponent(() => import('@/views/bus/menuFrontend/MenuFontendDetail.vue'));
+const QuickLinkDetail = defineAsyncComponent(() => import('@/views/bus/quickLink/QuickLinkDetail.vue'));
+const BankDetail = defineAsyncComponent(() => import('@/views/bus/bank/BankDetail.vue'));
+const DepartmentDetail = defineAsyncComponent(() => import('@/views/bus/department/DepartmentDetail.vue'));
+const AnoucementDetail = defineAsyncComponent(() => import('@/views/bus/anoucement/AnoucementDetail.vue'));
+const SupportListDetail = defineAsyncComponent(() => import('@/views/bus/supportList/SupportListDetail.vue'));
+const PositionDetail = defineAsyncComponent(() => import('@/views/bus/position/PositionDetail.vue'));
+const SupportDetail = defineAsyncComponent(() => import('@/views/bus/support/SupportDetail.vue'));
+const ContactDetail = defineAsyncComponent(() => import('@/views/bus/contact/ContactDetail.vue'));
+const CompanyInfoDetail = defineAsyncComponent(() => import('@/views/bus/companyInfo/CompanyInfoDetail.vue'));
+const ProvinceDetail = defineAsyncComponent(() => import('@/views/bus/province/ProvinceDetail.vue'));
+const DistrictDetail = defineAsyncComponent(() => import('@/views/bus/district/DistrictDetail.vue'));
+const WardDetail = defineAsyncComponent(() => import('@/views/bus/ward/WardDetail.vue'));
+const CategoryDetail = defineAsyncComponent(() => import('@/views/bus/category/CategoryDetail.vue'));
+const PaymentMethodDetail = defineAsyncComponent(() => import('@/views/bus/paymentMethod/PaymentMethodDetail.vue'));
+const BrandDetail = defineAsyncComponent(() => import('@/views/bus/brand/BrandDetail.vue'));
+const StaffDetail = defineAsyncComponent(() => import('@/views/bus/staff/StaffDetail.vue'));
+const ContractTemplateDetail = defineAsyncComponent(() => import('@/views/bus/contractTemplate/ContractTemplateDetail.vue'));
+const FeaturePackageDetail = defineAsyncComponent(() => import('@/views/bus/featurePackage/FeaturePackageDetail.vue'));
+const MembershipPlanDetail = defineAsyncComponent(() => import('@/views/bus/membershipPlan/MembershipPlanDetail.vue'));
+//#IMPORT_POUP_BUSINESS#
 
 /** System */
-const UserDetail = defineAsyncComponent(() => import('@/views/system/user/UserDetail.vue'));
-const RoleDetail = defineAsyncComponent(() => import('@/views/system/role/RoleDetail.vue'));
-const MenuDetail = defineAsyncComponent(() => import('@/views/system/menu/MenuDetail.vue')); 
-const DictionaryListDetail = defineAsyncComponent(() => import('@/views/system/dictionaryList/DictionaryListDetail.vue'));
-const DictionaryDetail = defineAsyncComponent(() => import('@/views/system/dictionary/DictionaryDetail.vue'));
-const ErrorReportDetail = defineAsyncComponent(() => import('@/views/system/errorReport/ErrorReportDetail.vue'));
-const JobDefinitionDetail = defineAsyncComponent(() => import('@/views/system/jobDefinition/JobDefinitionDetail.vue'));
-const LanguageDetail = defineAsyncComponent(() => import('@/views/system/language/LanguageDetail.vue'));
-const SystemConfigDetail = defineAsyncComponent(() => import('@/views/system/systemConfig/SystemConfigDetail.vue'));
-const ConfigNotifyDetail = defineAsyncComponent(() => import('@/views/system/configNotify/ConfigNotifyDetail.vue'));
-const ReceiveNotifyDetail = defineAsyncComponent(() => import('@/views/system/receiveNotify/ReceiveNotifyDetail.vue'));
-const ReceiveSelectUser = defineAsyncComponent(() => import('@/views/system/receiveNotify/ReceiveSelectUser.vue'));
-const KeywordDetail = defineAsyncComponent(() => import('@/views/system/keyword/KeywordDetail.vue'));
-const FunctionConfigDetail = defineAsyncComponent(() => import('@/views/system/functionConfig/FunctionConfigDetail.vue'));
-const CountryDetail = defineAsyncComponent(() => import('@/views/system/country/CountryDetail.vue'));
+const UserDetail = defineAsyncComponent(() => import('@/views/sys/user/UserDetail.vue'));
+const RoleDetail = defineAsyncComponent(() => import('@/views/sys/role/RoleDetail.vue'));
+const MenuDetail = defineAsyncComponent(() => import('@/views/sys/menu/MenuDetail.vue')); 
+const DictionaryListDetail = defineAsyncComponent(() => import('@/views/sys/dictionaryList/DictionaryListDetail.vue'));
+const DictionaryDetail = defineAsyncComponent(() => import('@/views/sys/dictionary/DictionaryDetail.vue'));
+const ErrorReportDetail = defineAsyncComponent(() => import('@/views/sys/errorReport/ErrorReportDetail.vue'));
+const JobDefinitionDetail = defineAsyncComponent(() => import('@/views/sys/jobDefinition/JobDefinitionDetail.vue'));
+const LanguageDetail = defineAsyncComponent(() => import('@/views/sys/language/LanguageDetail.vue'));
+const SystemConfigDetail = defineAsyncComponent(() => import('@/views/sys/systemConfig/SystemConfigDetail.vue'));
+const ConfigNotifyDetail = defineAsyncComponent(() => import('@/views/sys/configNotify/ConfigNotifyDetail.vue'));
+const ReceiveNotifyDetail = defineAsyncComponent(() => import('@/views/sys/receiveNotify/ReceiveNotifyDetail.vue'));
+const ReceiveSelectUser = defineAsyncComponent(() => import('@/views/sys/receiveNotify/ReceiveSelectUser.vue'));
+const KeywordDetail = defineAsyncComponent(() => import('@/views/sys/keyword/KeywordDetail.vue'));
+const FunctionConfigDetail = defineAsyncComponent(() => import('@/views/sys/functionConfig/FunctionConfigDetail.vue'));
+const CountryDetail = defineAsyncComponent(() => import('@/views/sys/country/CountryDetail.vue'));
+const DataControlDetail = defineAsyncComponent(() => import('@/views/sys/dataControl/DataControlDetail.vue'));
+//#IMPORT_POUP_SYSTEM#
 
 /** Customer */
-const VoucherEventDetail = defineAsyncComponent(() => import('@/views/customer/voucherEvent/VoucherEventDetail.vue'));
-const VoucherDetail = defineAsyncComponent(() => import('@/views/customer/voucher/VoucherDetail.vue'));
-const MemberTypeDetail = defineAsyncComponent(() => import('@/views/customer/memberType/MemberTypeDetail.vue'));
-const EmoticonDetail = defineAsyncComponent(() => import('@/views/customer/emoticon/EmoticonDetail.vue'));
-const RechargeDetail = defineAsyncComponent(() => import('@/views/customer/recharge/RechargeDetail.vue'));
-const ContractTemplateDetail = defineAsyncComponent(() => import('@/views/customer/contractTemplate/ContractTemplateDetail.vue'));
-const RegisterPackageDetail = defineAsyncComponent(() => import('@/views/customer/registerPackage/RegisterPackageDetail.vue'));
-const ProductGroupDetail = defineAsyncComponent(() => import('@/views/customer/productGroup/ProductGroupDetail.vue'));
-const SupplierDetail = defineAsyncComponent(() => import('@/views/customer/supplier/SupplierDetail.vue'));
-const FeaturePackageDetail = defineAsyncComponent(() => import('@/views/customer/featurePackage/FeaturePackageDetail.vue'));
-const MembershipPlanDetail = defineAsyncComponent(() => import('@/views/customer/membershipPlan/MembershipPlanDetail.vue'));
+const VoucherEventDetail = defineAsyncComponent(() => import('@/views/cust/voucherEvent/VoucherEventDetail.vue'));
+const VoucherDetail = defineAsyncComponent(() => import('@/views/cust/voucher/VoucherDetail.vue'));
+const MemberTypeDetail = defineAsyncComponent(() => import('@/views/cust/memberType/MemberTypeDetail.vue'));
+const EmoticonDetail = defineAsyncComponent(() => import('@/views/cust/emoticon/EmoticonDetail.vue'));
+const RechargeDetail = defineAsyncComponent(() => import('@/views/cust/recharge/RechargeDetail.vue'));
+const RegisterPackageDetail = defineAsyncComponent(() => import('@/views/cust/registerPackage/RegisterPackageDetail.vue'));
+const ProductGroupDetail = defineAsyncComponent(() => import('@/views/cust/productGroup/ProductGroupDetail.vue'));
+const SupplierDetail = defineAsyncComponent(() => import('@/views/cust/supplier/SupplierDetail.vue'));
+const WarehouseDetail = defineAsyncComponent(() => import('@/views/cust/warehouse/WarehouseDetail.vue'));
+const ViewSupplierDetail = defineAsyncComponent(() => import('@/views/cust/warehouse/ViewSupplierDetail.vue'));
+const ChatsDetail = defineAsyncComponent(() => import('@/views/cust/chats/ChatsDetail.vue'));
 
+//#IMPORT_POUP_CUSTOMER#
 
 /** Phần popup hệ thống system */
 const MsConfigLayoutList = defineAsyncComponent(() => import('@/components/layout/MsConfigLayoutList.vue'));
@@ -67,7 +71,6 @@ const UserProfile = defineAsyncComponent(() => import('@/components/layout/UserP
 const FileManagement = defineAsyncComponent(() => import('@/components/froala/FileManagement.vue'));
 
 export const register = (app: App<Element>) => {
-  app.component('EmployeeDetail', EmployeeDetail);
   app.component('UserDetail', UserDetail);
   app.component('RoleDetail', RoleDetail);
   app.component('MenuDetail', MenuDetail);
@@ -118,6 +121,13 @@ export const register = (app: App<Element>) => {
   app.component('ProductGroupDetail', ProductGroupDetail);
   app.component('SupplierDetail', SupplierDetail);
   app.component('CountryDetail', CountryDetail);
+  app.component('DataControlDetail', DataControlDetail);
+  app.component('WarehouseDetail', WarehouseDetail);
+  app.component('ViewSupplierDetail', ViewSupplierDetail);
   app.component('StaffDetail', StaffDetail);
+  app.component('RechargeDetail', RechargeDetail);
+  app.component('ChatsDetail', ChatsDetail);
+
+  //#REGIS_POUP#
 
 }

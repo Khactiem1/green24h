@@ -12,6 +12,8 @@ stages:
   - clean
 build:
   stage: build
+  rules:
+    - if: '$CI_COMMIT_REF_PROTECTED == "true"'
   only:
     - main
   variables:
@@ -26,6 +28,8 @@ build:
 
 deploy_k8s_job:
   stage: deploy
+  rules:
+    - if: '$CI_COMMIT_REF_PROTECTED == "true"'
   only:
     - main
   variables:
@@ -62,6 +66,8 @@ deploy_k8s_job:
     - kubectl apply -f ./template-deployment.yaml
 clean:
   stage: clean
+  rules:
+    - if: '$CI_COMMIT_REF_PROTECTED == "true"'
   only:
     - main
   script:

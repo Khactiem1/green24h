@@ -60,8 +60,7 @@
       </div>
     </div>
     <div class="modal__content flex-column flex1">
-      <span class="popup-shortkey" @shortkey="shortkeyAction"></span>
-      <!-- v-shortkey="defaultShortKey" -->
+      <span class="popup-shortkey" @shortkey="shortkeyAction" v-shortkey="defaultShortKey"></span>
       <slot name="content" :close="close"></slot>
     </div>
     <div class="modal__footer__line" v-if="$slots['footer']"></div>
@@ -216,14 +215,14 @@ const styles = computed(() => {
  * Push el để xử lý shortkey cho view
  */
 onMounted(() => {
-  // proxy.$ms.commonFn.shortkeyPushView(proxy.$el);
+  proxy.$ms.commonFn.shortkeyPushView(proxy.$el);
 });
 
 /**
  * Loại bỏ el dùng cho shortkey
  */
 onUnmounted(() => {
-  // proxy.$ms.commonFn.shortkeyPopView(proxy.$el);
+  proxy.$ms.commonFn.shortkeyPopView(proxy.$el);
 });
 /**
  * emit event click title

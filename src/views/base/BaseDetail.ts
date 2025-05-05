@@ -3,18 +3,21 @@ import { permission } from '@/mixins/common/permission';
 import { validateComponent } from '@/mixins/component/validateComponent';
 import { showAlert } from '@/commons/globalMessage';
 import { cloneDeep } from 'lodash-es';
+import { shortkeyStatusbar } from '@/mixins/common/shortkeyStatusbar';
+import { mixinMultipleLanguage } from '@/mixins/common/multipleLanguage';
 
 /**
  * Các thông tin chung của màn hình chi tiết
  */
 export default {
-	mixins: [mixinSuper, permission, validateComponent],
+	mixins: [mixinSuper, permission, validateComponent, shortkeyStatusbar, mixinMultipleLanguage],
 	data() {
 		return {
       /**
 			 * refname control hiển thị dữ liệu: grid/tree
 			 */
 			viewRef: 'viewList',
+
 			/**
 			 * Store của module kế thừa base
 			 */

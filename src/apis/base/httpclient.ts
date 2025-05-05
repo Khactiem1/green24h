@@ -5,6 +5,7 @@ import moment from 'moment';
 import Utility from '@/commons/utility';
 import { showError } from '@/commons/globalMessage';
 import i18n from '@/i18n/i18n';
+import authService from '@/commons/authService';
 
 // Danh sách đối tượng cần xử lý cancel request
 let cancelRequests: any = [];
@@ -259,8 +260,15 @@ class AxiosHttpClient {
 			commonFn.unmask();
 			//Unauthorized
 			if (error && error.response && error.response.status === 401) {
-				await showError(i18n.global.t('i18nCommon.Unauthorized'));
-				commonFn.logout();
+				if(error.response.data?.DevMessage == "REFRESH_TOKEN_INVALID"){ // hết cả hạn REFRESH_TOKEN
+					await showError(i18n.global.t('i18nCommon.Unauthorized'));
+					commonFn.logout();
+				}
+				// nếu 401 thì thực hiện lấy lại tokken mới dựa vào refresh_token
+				else if(!(await authService.refreshToken())){
+					await showError(i18n.global.t('i18nCommon.Unauthorized'));
+					commonFn.logout();
+				}
 			}
 			throw ex;
 		}

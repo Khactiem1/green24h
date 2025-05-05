@@ -32,7 +32,7 @@ class fileAPI extends baseApi {
   /**
    * Tải file lên server
    */
-  async uploadFile(file: any, path: string) {
+  async uploadFile(file: any, path: string, isUploadKeepNameFile: boolean = false) {
     const formData = new FormData();
 
     // Thêm file vào formData
@@ -40,7 +40,7 @@ class fileAPI extends baseApi {
     const user = commonFn.getUser();
     
     // Gửi file lên server
-    const result = await axios.post(this.getAPIUrl() + `/upload?path=${path}`, formData, {
+    const result = await axios.post(this.getAPIUrl() + `/upload?path=${path}&isUploadKeepNameFile=${isUploadKeepNameFile}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${user.access_token}`,
@@ -61,6 +61,16 @@ class fileAPI extends baseApi {
     };
     return await httpClient.deleteAsync(request);
   }
+
+  /**
+   * Xoá file theo đường dẫn
+   */
+  async getAllFileInPath(path: string){
+    let request = {
+      url: this.getAPIUrl() + `/?path=${path}`,
+    };
+    return await httpClient.getAsync(request);
+  } 
 }
 
 export default new fileAPI();

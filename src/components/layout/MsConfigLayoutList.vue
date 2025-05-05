@@ -83,7 +83,7 @@
 <script lang="ts">
 import { defineComponent, getCurrentInstance, ref, computed } from "vue";
 import draggable from "vuedraggable";
-import layoutAPI from "@/apis/dictionary/layoutAPI";
+import layoutAPI from "@/apis/sys/layoutAPI";
 import memoryCache from "@/cache/memoryCache";
 
 export default defineComponent({

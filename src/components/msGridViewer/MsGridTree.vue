@@ -138,7 +138,7 @@
                   left: `${col.lock ? `${col.offset}px` : ''}`,
                 }"
               >
-                <div class="flex">
+                <div class="flex align-center">
                   <div v-if="index == 0 && !row.is_parent">
                     <div class="image-not-chid"></div>
                   </div>

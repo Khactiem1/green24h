@@ -2,11 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import authService from '@/commons/authService';
 import commonFn from '@/commons/commonFunction';
 import i18n from '@/i18n/i18n';
-import routerDictionary from '@/router/routerDictionary';
-import routerBusiness from '@/router/routerBusiness';
-import routerSystem from '@/router/routerSystem';
+import routerBusiness from '@/router/routerBus';
+import routerSystem from '@/router/routerSys';
 import routerHome from '@/router/routerHome';
-import routerCustomer from '@/router/routerCustomer';
+import routerCustomer from '@/router/routerCust';
 
 const main: any [] = [
   {
@@ -14,7 +13,6 @@ const main: any [] = [
     component: () => import('@/page/MainPage.vue'),
     children: [
       ...routerHome,
-      ...routerDictionary,
       ...routerBusiness,
       ...routerSystem,
       ...routerCustomer,
@@ -58,7 +56,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   const user = commonFn.getUser();
   await authService.getAllPermission();
   // Thực hiện check quyền người dùng
-  if(user?.access_token && user?.user_id && to.path != '/not-permission' && to.meta.sub_system_code){
+  if(to.path != '/not-permission' && to.meta.sub_system_code){
     if(!(await authService.checkActionPermisson('View', to.meta.sub_system_code))){
       next({ name: "notPermission" });
     }
@@ -67,7 +65,6 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   // Thực hiện chuyển đến trang mong muốn
   if(to.name !== 'login'){
     if(user?.access_token){
-      localStorage.setItem("showParentIndex", String(0));
       if (to.path == '/'){
         next({ name: "dashboard" });
       }

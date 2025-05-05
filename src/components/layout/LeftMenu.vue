@@ -57,9 +57,8 @@
       }"
       class="sidebar-transition"
     >
-      <div v-for="item in listMenuItem" class="menu-items">
+      <div class="menu-items">
         <div
-          v-if="checkURL(item)"
           :style="{ position: 'absolute', width: '240px', height: '100%' }"
           :class="[
             'trans-nav nav-1 rounded-full',
@@ -68,28 +67,20 @@
         >
           <div class="overflow-hidden">
             <h2 class="ml-3 px-5 border-line-bottom py-14px text-uppercase">
-              {{ $t(`i18nMenu.sub_system_code.${item.menu_code}`) }}
+              {{ $t(`i18nMenu.sub_system_code.${listchildView.menu_code}`) }}
             </h2>
           </div>
           <div
-            v-if="item.child && item.child.length > 0"
+            v-for="child in listchildView"
             class="px-4"
             style="width: 240px; min-width: 240px; overflow: hidden"
           >
             <div class="custom-expansion-panels">
               <div
-                v-for="(child, index) in item.child"
-                :key="index"
                 class="custom-expansion-panel"
               >
-                <div
-                  class="custom-panel-header"
-                  :class="{ active: showChildIndex === index }"
-                  @click="toggleChild(index)"
-                >
-                  <div
-                    class="d-flex justify-space-between pointer nav-item flex-center"
-                  >
+                <div class="custom-panel-header" :class="{ active: child.child.height ? true: false }" @click="toggleChild(child)">
+                  <div class="d-flex justify-space-between pointer nav-item flex-center">
                     <div class="d-flex flex-center">
                       <i class="mx-6px color-icon-dark" :class="child.icon"></i>
                       <h4
@@ -101,39 +92,28 @@
                     </div>
                     <span v-if="child.child.length > 0">
                       <i
+                        :class="{ 'rotate-icon': child.child.height ? true: false }"
                         class="fa-solid fa-chevron-down color-icon-dark mr-1"
                         style="font-size: 11px"
-                        :class="{ 'rotate-icon': showChildIndex === index }"
                       ></i>
                     </span>
                   </div>
                 </div>
-                <div
-                  class="custom-panel-content"
-                  :class="{ open: showChildIndex === index }"
-                >
-                  <router-link
-                    v-for="childItem in child.child"
-                    :key="childItem.menu_id"
-                    :to="childItem.url"
-                    class="d-flex align-center pointer nav-item py-2 mb-1"
-                    @click="changeUrl(childItem)"
-                  >
-                    <i
-                      class="fa-regular fa-circle mr-2 color-icon-primary"
-                      style="font-size: 10px"
-                    ></i>
-                    <div
-                      class="item-link"
-                      :class="{ active: urlCur === childItem.url }"
+                <div class="custom-panel-content" :style="{ maxHeight: child.child.height ? child.child.height + 'px': 0 }">
+                  <div :id="`collapse-${child.menu_code}-id`">
+                    <router-link
+                      v-for="childItem in child.child"
+                      :to="childItem.url"
+                      class="d-flex align-center pointer nav-item py-2 mb-1"
                     >
-                      <p>
-                        {{
-                          $t(`i18nMenu.sub_system_code.${childItem.menu_code}`)
-                        }}
-                      </p>
-                    </div>
-                  </router-link>
+                      <i class="fa-regular fa-circle mr-2 color-icon-primary" style="font-size: 10px"></i>
+                      <div class="item-link" :class="{ active: fullPath === childItem.url }">
+                        <p>
+                          {{ $t(`i18nMenu.sub_system_code.${childItem.menu_code}`) }}
+                        </p>
+                      </div>
+                    </router-link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -145,18 +125,10 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  reactive,
-  getCurrentInstance,
-  onMounted,
-  nextTick,
-} from "vue";
+import { defineComponent, reactive, getCurrentInstance, onMounted, ref } from "vue";
 import TheChangeLanguage from "@/components/layout/TheChangeLanguage.vue";
-import menuAPI from "@/apis/system/menuAPI";
+import menuAPI from "@/apis/sys/menuAPI";
 import authService from "@/commons/authService";
-import { cloneDeep } from "lodash-es";
-import { ref } from "vue";
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 export default defineComponent({
@@ -173,55 +145,38 @@ export default defineComponent({
     const { proxy }: any = getCurrentInstance();
     const fullPath = ref(null);
     const route = useRoute();
-    const listMenuItem: any[] = reactive([]); // Danh sách menu có thể nhìn thấy theo quyền hạn
-
-    // Dữ liệu cho tính năng xổ xuống
-    const showChildIndex = ref<number | null>(null);
+    const listMenuItem: any [] = reactive([]); // Danh sách menu có thể nhìn thấy theo quyền hạn
+    const listchildView = ref<any []>([]); // Danh sách các node child đang hiển thị
 
     // Hàm toggle xổ xuống
-    const urlPath = ref(window.location.pathname);
-    let urlCur = cloneDeep(urlPath);
     const changeUrl = (menu: any, isColapse = false) => {
-      showChildIndex.value = null;
-      urlCur.value = menu.url;
       const me = proxy;
       if(!menu.child?.length && isColapse){
         me.settingApp.showSidebar = false;
       }
       else{
+        listchildView.value = menu.child;
         me.settingApp.showSidebar = true;
       }
     };
-    const toggleChild = (index: number) => {
-      if (showChildIndex.value === index) {
-        showChildIndex.value = null;
-        const panel = document.querySelectorAll<HTMLElement>(
-          ".custom-panel-content"
-        )[index];
-        panel.style.maxHeight = "0";
-      } else {
-        showChildIndex.value = index;
-
-        // Tính toán chiều cao động
-        nextTick(() => {
-          const panel = document.querySelectorAll<HTMLElement>(
-            ".custom-panel-content"
-          )[index];
-          if (panel) {
-            panel.style.maxHeight = `${panel.scrollHeight}px`;
-          }
-        });
-      }
-
-      // Đặt maxHeight về 0 khi đóng
-      const panels = document.querySelectorAll<HTMLElement>(
-        ".custom-panel-content"
-      );
-      panels.forEach((panel, idx) => {
-        if (idx !== index) {
-          panel.style.maxHeight = "0";
+    const toggleChild = (child: any) => {
+      listchildView.value.forEach(_ => {
+        if(child.menu_id != _.menu_id){
+          _.child.height = 0;
         }
       });
+      if(child?.child?.length){
+        const elmToggle = document.getElementById(`collapse-${child.menu_code}-id`);
+        if(elmToggle){
+          if(child.child.height){
+            child.child.height = 0;
+          }
+          else
+          {
+            child.child.height = elmToggle.clientHeight;
+          }
+        }
+      }
     };
 
     onBeforeRouteUpdate((to, from) => {
@@ -247,14 +202,6 @@ export default defineComponent({
       }
       return false;
     };
-
-    const toggleConsole = (Data: any) => {
-      urlCur.value = Data.url;
-    };
-    const checkURL = (item: any): boolean =>
-      item?.url === urlCur.value ||
-      item?.child?.some((childItem: any) => checkURL(childItem)) ||
-      false;
 
     /**
      * Khởi tạo các màn hình có thể view
@@ -340,46 +287,6 @@ export default defineComponent({
     };
 
     /**
-     * Sự kiện hover vào parent Menu active child menu
-     */
-    const activeChildMenu = (idElm: string) => {
-      const me = proxy;
-      const elm = document.getElementById(idElm);
-      const elmParent = document.getElementById(`${idElm}-parent`);
-      if (elm && elmParent) {
-        elm.style.display = "flex";
-        if (me.settingApp.showSidebar) {
-          elm.style.left = "202px";
-        } else {
-          elm.style.left = "54px";
-        }
-        const distanceToTop =
-          elmParent.getBoundingClientRect().top + window.scrollY;
-        if (
-          distanceToTop + elm.getBoundingClientRect().height >
-          window.innerHeight
-        ) {
-          elm.style.top = `${
-            window.innerHeight - elm.getBoundingClientRect().height - 8
-          }px`;
-        } else {
-          elm.style.top = `${distanceToTop}px`;
-        }
-      }
-    };
-
-    /**
-     * Ẩn menu child đi
-     */
-    const hideChildMenu = (e: any, idElm: string) => {
-      const elm = document.getElementById(idElm);
-      const toClassNameElm = e?.toElement?.className;
-      if (!(toClassNameElm && toClassNameElm.includes("child-menu")) && elm) {
-        elm.style.display = "none";
-      }
-    };
-
-    /**
      * Check quyền màn hình Child
      */
     const processChildMenuItem = (menuItem: any) => {
@@ -389,7 +296,11 @@ export default defineComponent({
             checkPermissionView(_.menu_code)
           );
         });
-        menuItem.child = menuItem.child.filter((_: any) => _.child.length);
+        menuItem.child = menuItem.child.filter((_: any) => {
+          _.child.height = 0;
+          return _.child.length;
+        });
+        menuItem.child.menu_code = menuItem.menu_code;
         if (menuItem.child.length) {
           return true;
         }
@@ -407,15 +318,11 @@ export default defineComponent({
 
     return {
       listMenuItem,
-      activeChildMenu,
-      hideChildMenu,
-      urlCur,
-      checkURL,
+      listchildView,
       toggleChild,
-      showChildIndex,
       checkActiveUrl,
       changeUrl,
-      toggleConsole,
+      fullPath,
     };
   },
 });
@@ -714,7 +621,6 @@ export default defineComponent({
 .custom-panel-content {
   padding: 0px 16px;
   overflow: hidden;
-  max-height: 0;
   transition: max-height 0.5s ease;
 }
 

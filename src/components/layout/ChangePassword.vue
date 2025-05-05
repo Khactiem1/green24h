@@ -82,7 +82,7 @@
 import { defineComponent, getCurrentInstance, ref } from "vue";
 import { validateComponent } from '@/mixins/component/validateComponent';
 import { showError } from "@/commons/globalMessage";
-import userAPI from "@/apis/system/userAPI";
+import userAPI from "@/apis/sys/usersAPI";
 
 export default defineComponent({
   mixins: [validateComponent],

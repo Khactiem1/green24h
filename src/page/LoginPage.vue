@@ -100,8 +100,7 @@
 </template>
 
 <script lang="ts">
-import userAPI from "@/apis/system/userAPI";
-import type i18n from "@/i18n/i18n";
+import userAPI from "@/apis/sys/usersAPI";
 import { defineComponent, getCurrentInstance, reactive, ref } from "vue";
 
 export default defineComponent({
@@ -134,13 +133,12 @@ export default defineComponent({
       const result = await userAPI.login(user);
       me.$ms.commonFn.unmask();
       if (result?.Data?.access_token) {
-        localStorage.setItem("showParentIndex", String(0));
         me.$ms.commonFn.setUser(result.Data);
         window.location.reload();
       } else {
         me.$ms.commonFn.pushNotification({
           type: me.$ms.constant.ENotificationType.Error,
-          message: me.$t("i18nCommon.is_valid_user"),
+          message: me.$t( result?.UserMessage ? result.UserMessage : "i18nCommon.is_valid_user"),
         });
       }
     };

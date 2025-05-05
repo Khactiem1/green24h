@@ -2,16 +2,18 @@ import { mixinSuper } from '@/mixins/common/mixinSuper';
 import { permission } from '@/mixins/common/permission';
 import { showAlert } from '@/commons/globalMessage';
 import popupUtil from '@/commons/popupUtil';
-import layoutAPI from '@/apis/dictionary/layoutAPI';
+import layoutAPI from '@/apis/sys/layoutAPI';
 import memoryCache from '@/cache/memoryCache';
 import moment from "moment";
+import { shortkeyStatusbar } from '@/mixins/common/shortkeyStatusbar';
+import { mixinMultipleLanguage } from '@/mixins/common/multipleLanguage';
 
 /**
  * Các thông tin chung của màn hình danh sách
  * Sử dụng chung cho danh sách và báo cáo động
  */
 export default {
-	mixins: [mixinSuper, permission],
+	mixins: [mixinSuper, permission, shortkeyStatusbar, mixinMultipleLanguage],
 	data() {
 		return {
 			/**
@@ -77,6 +79,13 @@ export default {
 			 * Có lấy lên cột trạng thái hay ko
 			 */
 			isLoadActiveColumn: true,
+
+			/**
+			 * Các shortkey ở màn danh sách
+			 */
+			defaultShortKeyList: {
+				AddNew: ["alt", "n"], // Thêm mới
+			},
 		};
 	},
 	created() {
@@ -88,17 +97,25 @@ export default {
 	},
 	async mounted() {
 		const me: any = this;
+		me.$ms.commonFn.shortkeyPushView(me.$el); // thêm phím tắt
 		await me.initLayout();
+		me.isAfterLoadLayout = true;
 		//load dữ liệu lần đầu
-		me.$nextTick(() => {
-			me.loadData();
-		});
+		if(!me.isFormMultipleLanguage || me.isAfterLoadLanguage){
+			me.$nextTick(() => {
+				me.loadData();
+			});
+		}
 	},
 	/**
 	 * Xóa items trong grid khi unmount
 	 */
 	beforeUnmount() {
 
+	},
+	unmounted() {
+		const me: any = this;
+		me.$ms.commonFn.shortkeyPopView(me.$el); // xoá phím tắt
 	},
 	methods: {
 		/**
@@ -149,7 +166,25 @@ export default {
 			const me: any = this;
 			// Xử lý param colums truy vấn db
 			if(me.$refs[me.viewRef] && me.$refs[me.viewRef].columnx?.length){
-				param.Columns = me.$refs[me.viewRef].columnx.map((_: any) => _.dataField).filter(_ => _).join(',');
+				const lang = me.languageActive();
+				param.Columns = me.$refs[me.viewRef].columnx.map((_: any) => {
+					if(
+						me.isFormMultipleLanguage && 
+						lang && 
+						_.dataField && 
+						me.listColumnsMultipleLanguage && 
+						(	
+							me.listColumnsMultipleLanguage.includes(_.dataField) ||
+							me.listColumnsMultipleLanguage.includes(_.dataFieldDefault)
+						)
+					){
+						if(!_.dataFieldDefault){
+							_.dataFieldDefault = _.dataField;
+						}
+						_.dataField = `${_.dataFieldDefault}_${lang}`;
+					}
+					return _.dataField;
+				}).filter(_ => _).join(',');
 			}
 			if(me.storeModule?._config?.field?.key){
 				if(param.Columns){
@@ -167,7 +202,7 @@ export default {
 
 			// Xử lý build Filter
 			param.Filter = me.buildFilterParam();
-			param.Sort = me.buildSortFilter();
+			param.Sort = me.buildSortFilter(param);
 		},
 
 		/**
@@ -185,13 +220,16 @@ export default {
 		/**
 		 * Xử lý build tham số sort grid
 		 */
-		buildSortFilter(){
+		buildSortFilter(param){
 			const me: any = this;
 			if(me.$refs[me.viewRef] && typeof me.$refs[me.viewRef].buildSortFilter === 'function'){
 				const sort = me.$refs[me.viewRef].buildSortFilter();
 				if(sort){
 					return sort;
 				}
+			}
+			if(param?.Columns && param.Columns.split(',').find(_ => _ && _.trim() == 'sort')){ // default sort theo trường sort nếu có
+				return "sort ASC";
 			}
 			return '';
 		},
@@ -499,6 +537,19 @@ export default {
 					link.click(); // Kích hoạt tải xuống
 					window.URL.revokeObjectURL(url); // Giải phóng bộ nhớ
 				}
+			}
+		},
+
+		/**
+		 * Xử lý active show cột ngôn ngữ click vào
+		 */
+		activeTabLanguage(tab){
+			const me: any = this;
+			me.isAfterLoadLanguage = true;
+			if(me.isAfterLoadLayout){
+				me.$nextTick(() => {
+					me.loadData();
+				});
 			}
 		},
 

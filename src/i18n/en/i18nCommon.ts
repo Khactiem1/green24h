@@ -49,6 +49,7 @@ export default {
   AskRestoreDuplicateData: "The data being added coincides with a previously deleted record, do you want to restore it?",
   enter_filter: "Enter filter",
   AskDeleteRecord: "Do you really want to remove?",
+  AskRestoreRecord: "Do you really want to Restore?",
   AskResetPassword: "Are you sure you want to reset your password? It will be returned to default?",
   DuplicateDataDel: "The record code already exists in the system.",
   crud: {
@@ -59,6 +60,7 @@ export default {
     edit_success: "Edit success",
     update_success: "Update success",
     restore_success: "Restore success",
+    restore: "Restore",
     add_row: "Add row",
     delete_row: "Delete row",
     delete_all_row: "Delete all row",

@@ -3,6 +3,10 @@ $input-height: 30px;
 	color: var(--while__color);
 	background-color: var(--primary__color);
 }
+:deep(.combobox-item.checked-mutiple){
+	background-color: var(--primary__color-bg);
+	color: var(--primary__color);
+}
 .ms-combobox {
   width: 100%;
   background-color: transparent;
@@ -106,10 +110,18 @@ input.input.flex::placeholder {
   border: 1px solid var(--primary__color);
   column-gap: 8px;
   margin-right: 4px;
-  padding: 6px 4px 6px 8px;
+  padding: 2px 4px 2px 8px;
   color: var(--primary__color);
   font-weight: 600;
   font-size: 12px;
+}
+.selected-options{
+	display: flex;
+	flex-basis: 100%;
+	flex-grow: 1;
+	flex-wrap: wrap;
+	width: calc(100% - 32px);
+	align-items: center;
 }
 
 .equal-primary::before{
@@ -146,16 +158,6 @@ display: flex;
   margin-left: 6px;
 }
 
-.selected-options{
-	display: flex;
-	flex-basis: 100%;
-	flex-grow: 1;
-	flex-wrap: wrap;
-	width: calc(100% - 32px);
-	align-items: center;
-	padding: 0 0 0 10px;
-	max-width: 450px;
-}
 .selected-items-input {
 	margin: 4px 2px;
 }

@@ -40,3 +40,8 @@
   color: var(--primary__color);
   cursor: pointer;
 }
+.widget-more-container{
+  .fa-caret-down{
+    color: var(--primary__color);
+  }
+}

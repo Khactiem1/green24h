@@ -175,11 +175,15 @@ export default defineComponent({
      * @param item 
      */
     const handleSelectComparisonType = (item: any) => {
+      const me: any = proxy;
       if(item?.enumKey === 'Null' || item?.enumKey === 'NotNull'){
         valueFilter.value = null;
       }
       comparisonType.value = item;
       isShowDropDown.value = !isShowDropDown.value;
+      me.$nextTick(() => {
+        me.$ms.commonFn.focusFirstControl(me.$refs['refFilterControl']?.$el);
+      });
     };
 
     /**

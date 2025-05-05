@@ -1,7 +1,11 @@
 <template>
 	<div style="width: 100%; height: 100%; padding: 10px 24px;">
-		<div id="id-dashboard" @click="show">
-		</div>
+		<ms-tab
+			:listTabItem="listTabItem"
+			v-model="activeTab"
+		>
+			
+		</ms-tab>
 		<div style="width: 500px; margin-bottom: 6px;" class="flex">
 			<div class="form-group">
 				<ms-file-upload
@@ -148,32 +152,27 @@
 				:pathVideo="'/news/video'"
 			/> -->
 		</div>
-		<div style="height: 400px;">
-			<ms-froala-view v-model="model"></ms-froala-view>
-		</div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, getCurrentInstance, ref, reactive } from 'vue';
 import popupUtil from '@/commons/popupUtil';
-import useModuleEmployee from '@/stores/dictionary/moduleEmployee';
-import employeeAPI from '@/apis/dictionary/employeeAPI';
 import MsFroala from '@/components/froala/MsFroala.vue';
 import { showInfo, showAlert, showConfirm, showError, showWarning } from '@/commons/globalMessage';
-import MsFroalaView from '@/components/froala/MsFroalaView.vue';
-import dictionaryListAPI from '@/apis/system/dictionaryListAPI';
+import dictionaryListAPI from '@/apis/sys/dictionaryListAPI';
 import { useRemoteCombobox } from '@/setup/remoteCombobox';
-import menuAPI from '@/apis/system/menuAPI';
+import menuAPI from '@/apis/sys/menuAPI';
 import MsComboboxTreeV2 from '@/components/comboboxTree/MsComboboxTreeV2.vue';
 import MsFileUpload from '@/components/input/MsFileUpload.vue';
+import MsTab from '@/components/msTab/MsTab.vue';
 
 export default defineComponent({
   components: {
 		MsFroala,
-		MsFroalaView,
 		MsComboboxTreeV2,
 		MsFileUpload,
+		MsTab,
   },
 	setup() {
 		const { proxy } : any = getCurrentInstance();
@@ -185,6 +184,25 @@ export default defineComponent({
 		const currentItem = ref({
 			DocumentIncluded: '[{"FileID":"/user/avatar/d9146b2f-4196-47ff-9d09-a82cd926d83c.jpg","FileName":"FreeLook.jpg","FileSize":3230,"FileType":".jpg","UploadDate":"2025-02-04T07:12:59.901+07:00"}]',
 		});
+		const listTabItem = ref([
+			{
+				tabKey: 'vi',
+				title: 'Tiếng Việt'
+			},
+			{
+				tabKey: 'en',
+				title: 'English'
+			},
+			{
+				tabKey: 'KH',
+				title: 'Korea'
+			},
+			{
+				tabKey: 'JP',
+				title: 'Japan'
+			}
+		]);
+		const activeTab = ref('vi');
 		const contentFroala = ref(null);
 		const datePicker = ref(new Date());
 		const msInput  = ref();
@@ -192,8 +210,6 @@ export default defineComponent({
 		const msCheckbox  = ref(true);
 		const gender  = ref(0);
 		const model = ref(null);
-
-		const storeModule: any = useModuleEmployee();
 
 		const showInfoFn = async () => {
 			popupUtil.show('EmployeeDetail');
@@ -225,15 +241,6 @@ export default defineComponent({
 
     const show = async () => {
       const me = proxy;
-      // popupUtil.show('EmployeeDetail');
-
-      console.log(me.$ms.commonFn.getEnumSource("Gender"));
-      me.$ms.commonFn.mask();
-      let test = await employeeAPI.getEdit({
-        id: '616cd111-ae1d-4ad7-8a59-2a9a5d1ac693',
-      });
-      console.log(test);
-      me.$ms.commonFn.unmask();
 
     }
 
@@ -329,6 +336,8 @@ export default defineComponent({
 			msInput,
 			contentFroala,
 			msNumber,
+			listTabItem,
+			activeTab,
 			msCheckbox,
 			gender,
 			modelComboboxEnum,

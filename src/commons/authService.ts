@@ -1,4 +1,5 @@
-import roleAPI from "@/apis/system/roleAPI";
+import roleAPI from "@/apis/sys/roleAPI";
+import userAPI from "@/apis/sys/usersAPI";
 import memoryCache from "@/cache/memoryCache";
 import commonFn from "./commonFunction";
 
@@ -13,6 +14,21 @@ class AuthService {
    * Toàn bộ role của user
    */
   public allRole: any [] = [];
+
+  async refreshToken () {
+    const user = commonFn.getUser();
+    if(user?.refresh_token){
+      commonFn.mask();
+      const result = await userAPI.refreshToken({ refresh_token: user.refresh_token, access_token: user.access_token });
+      commonFn.unmask();
+      if(result?.Success && result?.Data?.access_token){
+        commonFn.setUser(result.Data);
+        window.location.reload();
+        return true;
+      }
+    }
+    return false;
+  }
 
   /**
    * Lấy toàn bộ quyền về

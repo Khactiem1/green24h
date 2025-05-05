@@ -121,8 +121,8 @@
 
 <script lang="ts">
 import { defineComponent, getCurrentInstance, reactive, ref } from "vue";
-import useModuleUser from "@/stores/system/moduleUser";
-import userAPI from "@/apis/system/userAPI";
+import useModuleUser from "@/stores/sys/moduleUser";
+import userAPI from "@/apis/sys/usersAPI";
 import BaseDetail from "@/views/base/BaseDetail";
 import MsFileImage from "@/components/file/MsFileImage.vue";
 
@@ -166,6 +166,10 @@ export default defineComponent({
 }
 :deep(.ms-file-image){
   .image-form{
+    max-width: 120px;
+    width: 120px;
+    max-height: 120px;
+    height: 120px;
     border-radius: 50%;
     img {
       border-radius: 50%;

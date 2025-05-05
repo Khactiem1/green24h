@@ -51,6 +51,7 @@ const props = defineProps({
   maxWidth: { type: Number, default: 1024 }, // Kích thước nén tối đa
   maxSize: { type: Number, default: 800 * 1024 }, // Dung lượng tối đa cho phép (ví dụ: 800kb)
   autoZoom: { type: Boolean, default: false }, // autoZoom
+  isUploadKeepNameFile: { type: Boolean, default: false }, // upload dữ nguyên tên hình ảnh tải lên
 })
 const emits = defineEmits(['update:modelValue']);
 const fileEdit = ref('');
@@ -105,7 +106,7 @@ const confirmPreview = async (processedFile: File) => {
   const me: any = proxy;
   showPreview.value = false;
   me.$ms.commonFn.mask();
-  const result: any = await fileAPI.uploadFile(processedFile, me.path);
+  const result: any = await fileAPI.uploadFile(processedFile, me.path, me.isUploadKeepNameFile);
   me.$ms.commonFn.unmask();
   selectedFile.value = null;
   me.$refs['refFile'].value = null;

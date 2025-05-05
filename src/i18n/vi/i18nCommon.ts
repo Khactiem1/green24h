@@ -49,6 +49,7 @@ export default {
   AskRestoreDuplicateData: "Dữ liệu đang thêm trùng với bản ghi đã xoá trước đó, bạn có muốn khôi phục?",
   enter_filter: "Nhập giá trị lọc",
   AskDeleteRecord: "Bạn có thực sự muốn xoá?",
+  AskRestoreRecord: "Bạn có thực sự muốn khôi phục?",
   AskResetPassword: "Bạn có chắc muốn đặt lại mật khẩu không, mật khẩu sẽ bị chuyển về mặc định?",
   DuplicateDataDel: "Mã bản ghi đã tồn tại trong hệ thống.",
   crud: {
@@ -59,6 +60,7 @@ export default {
     edit_success: "Cập nhật thành công",
     update_success: "Cập nhật thành công",
     restore_success: "Khôi phục thành công",
+    restore: "Khôi phục",
     add_row: "Thêm dòng",
     delete_row: "Xoá dòng",
     delete_all_row: "Xoá hết dòng",

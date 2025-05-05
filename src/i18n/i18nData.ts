@@ -1,122 +1,128 @@
 // vi
-import i18nEmployee from "@/i18n/vi/dictionary/i18nEmployee";
-import i18nUser from "@/i18n/vi/system/i18nUser";
-import i18nRole from "@/i18n/vi/system/i18nRole";
+import i18nUser from "@/i18n/vi/sys/i18nUser";
+import i18nRole from "@/i18n/vi/sys/i18nRole";
 import i18nCommon from "@/i18n/vi/i18nCommon";
 import i18nControl from "@/i18n/vi/i18nControl";
 import i18nEnum from "@/i18n/vi/i18nEnum";
-import i18nMenu from "@/i18n/vi/system/i18nMenu";
-import i18nMenuFontend from "@/i18n/vi/business/i18nMenuFontend";
-import i18nQuickLink from "@/i18n/vi/business/i18nQuickLink";
-import i18nErrorReport from "@/i18n/vi/system/i18nErrorReport";
-import i18nJobDefinition from "@/i18n/vi/system/i18nJobDefinition";
-import i18nLanguage from "@/i18n/vi/system/i18nLanguage";
-import i18nSystemConfig from "@/i18n/vi/system/i18nSystemConfig";
-import i18nConfigNotify from "@/i18n/vi/system/i18nConfigNotify";
-import i18nReceiveNotify from "@/i18n/vi/system/i18nReceiveNotify";
+import i18nMenu from "@/i18n/vi/sys/i18nMenu";
+import i18nMenuFontend from "@/i18n/vi/bus/i18nMenuFontend";
+import i18nQuickLink from "@/i18n/vi/bus/i18nQuickLink";
+import i18nErrorReport from "@/i18n/vi/sys/i18nErrorReport";
+import i18nJobDefinition from "@/i18n/vi/sys/i18nJobDefinition";
+import i18nLanguage from "@/i18n/vi/sys/i18nLanguage";
+import i18nSystemConfig from "@/i18n/vi/sys/i18nSystemConfig";
+import i18nConfigNotify from "@/i18n/vi/sys/i18nConfigNotify";
+import i18nReceiveNotify from "@/i18n/vi/sys/i18nReceiveNotify";
 import i18nValidate from "@/i18n/vi/i18nValidate"; 
-import i18nBank from "@/i18n/vi/business/i18nBank";
-import i18nBanner from "@/i18n/vi/business/i18nBanner";
-import i18nFooter from "@/i18n/vi/business/i18nFooter";
-import i18nAnoucement from "@/i18n/vi/business/i18nAnoucement";
-import i18nDictionaryList from "@/i18n/vi/system/i18nDictionaryList";
-import i18nDictionary from "@/i18n/vi/system/i18nDictionary";
-import i18nNews from "@/i18n/vi/business/i18nNews";
-import i18nNewsList from "@/i18n/vi/business/i18nNewsList";
-import i18nDepartment from "@/i18n/vi/business/i18nDepartment";
-import i18nSupportList from "@/i18n/vi/business/i18nSupportList";
-import i18nPosition from "@/i18n/vi/business/i18nPosition";
-import i18nSupport from "@/i18n/vi/business/i18nSupport";
-import i18nContact from "@/i18n/vi/business/i18nContact";
-import i18nKeyword from "@/i18n/vi/system/i18nKeyword";
-import i18nCompanyInfo from "@/i18n/vi/business/i18nCompanyInfo";
-import i18nFunctionConfig from "@/i18n/vi/system/i18nFunctionConfig";
-import i18nProvince from "@/i18n/vi/business/i18nProvince";
-import i18nDistrict from "@/i18n/vi/business/i18nDistrict";
-import i18nWard from "@/i18n/vi/business/i18nWard";
-import i18nVoucherEvent from "@/i18n/vi/customer/i18nVoucherEvent";
-import i18nVoucher from "@/i18n/vi/customer/i18nVoucher";
-import i18nCategory from "@/i18n/vi/business/i18nCategory";
-import i18nMemberType from "@/i18n/vi/customer/i18nMemberType";
-import i18nPaymentMethod from "@/i18n/vi/business/i18nPaymentMethod";
-import i18nCustomer from "@/i18n/vi/customer/i18nCustomer";
-import i18nEmoticon from "@/i18n/vi/customer/i18nEmoticon";
-import i18nOrderHistory from "@/i18n/vi/customer/i18nOrderHistory";
-import i18nRecharge from "@/i18n/vi/customer/i18nRecharge";
-import i18nTransaction from "@/i18n/vi/customer/i18nTransaction";
-import i18nContractTemplate from "@/i18n/vi/customer/i18nContractTemplate";
-import i18nBrand from "@/i18n/vi/business/i18nBrand";
-import i18nRegisterPackage from "@/i18n/vi/customer/i18nRegisterPackage";
-import i18nProductGroup from "@/i18n/vi/customer/i18nProductGroup";
-import i18nSupplier from "@/i18n/vi/customer/i18nSupplier";
-import i18nFeaturePackage from "@/i18n/vi/customer/i18nFeaturePackage";
-import i18nMembershipPlan from "@/i18n/vi/customer/i18nMembershipPlan";
-import i18nCountry from "@/i18n/vi/system/i18nCountry";
-import i18nStaff from "@/i18n/vi/business/i18nStaff";
-import i18nProduct from "@/i18n/vi/customer/i18nProduct";
+import i18nBank from "@/i18n/vi/bus/i18nBank";
+import i18nBanner from "@/i18n/vi/bus/i18nBanner";
+import i18nFooter from "@/i18n/vi/bus/i18nFooter";
+import i18nAnoucement from "@/i18n/vi/bus/i18nAnoucement";
+import i18nDictionaryList from "@/i18n/vi/sys/i18nDictionaryList";
+import i18nDictionary from "@/i18n/vi/sys/i18nDictionary";
+import i18nNews from "@/i18n/vi/bus/i18nNews";
+import i18nNewsList from "@/i18n/vi/bus/i18nNewsList";
+import i18nDepartment from "@/i18n/vi/bus/i18nDepartment";
+import i18nSupportList from "@/i18n/vi/bus/i18nSupportList";
+import i18nPosition from "@/i18n/vi/bus/i18nPosition";
+import i18nSupport from "@/i18n/vi/bus/i18nSupport";
+import i18nContact from "@/i18n/vi/bus/i18nContact";
+import i18nKeyword from "@/i18n/vi/sys/i18nKeyword";
+import i18nCompanyInfo from "@/i18n/vi/bus/i18nCompanyInfo";
+import i18nFunctionConfig from "@/i18n/vi/sys/i18nFunctionConfig";
+import i18nProvince from "@/i18n/vi/bus/i18nProvince";
+import i18nDistrict from "@/i18n/vi/bus/i18nDistrict";
+import i18nWard from "@/i18n/vi/bus/i18nWard";
+import i18nVoucherEvent from "@/i18n/vi/cust/i18nVoucherEvent";
+import i18nVoucher from "@/i18n/vi/cust/i18nVoucher";
+import i18nCategory from "@/i18n/vi/bus/i18nCategory";
+import i18nMemberType from "@/i18n/vi/cust/i18nMemberType";
+import i18nPaymentMethod from "@/i18n/vi/bus/i18nPaymentMethod";
+import i18nCustomer from "@/i18n/vi/cust/i18nCustomer";
+import i18nEmoticon from "@/i18n/vi/cust/i18nEmoticon";
+import i18nOrderHistory from "@/i18n/vi/cust/i18nOrderHistory";
+import i18nRecharge from "@/i18n/vi/cust/i18nRecharge";
+import i18nTransaction from "@/i18n/vi/cust/i18nTransaction";
+import i18nContractTemplate from "@/i18n/vi/bus/i18nContractTemplate";
+import i18nBrand from "@/i18n/vi/bus/i18nBrand";
+import i18nRegisterPackage from "@/i18n/vi/cust/i18nRegisterPackage";
+import i18nProductGroup from "@/i18n/vi/cust/i18nProductGroup";
+import i18nSupplier from "@/i18n/vi/cust/i18nSupplier";
+import i18nFeaturePackage from "@/i18n/vi/bus/i18nFeaturePackage";
+import i18nMembershipPlan from "@/i18n/vi/bus/i18nMembershipPlan";
+import i18nCountry from "@/i18n/vi/sys/i18nCountry";
+import i18nStaff from "@/i18n/vi/bus/i18nStaff";
+import i18nWarehouse from "@/i18n/vi/cust/i18nWarehouse";
+import i18nProduct from "@/i18n/vi/cust/i18nProduct";
+import i18nDataControl from "@/i18n/vi/sys/i18nDataControl";
+import i18nChats from "@/i18n/vi/cust/i18nChats";
 
+//#IMPORT_I18N_VI#
 
 // en
-import i18nEnEmployee from "@/i18n/en/dictionary/i18nEmployee";
-import i18nEnUser from "@/i18n/en/system/i18nUser";
-import i18nEnRole from "@/i18n/en/system/i18nRole";
+import i18nEnUser from "@/i18n/en/sys/i18nUser";
+import i18nEnRole from "@/i18n/en/sys/i18nRole";
 import i18nEnCommon from "@/i18n/en/i18nCommon";
 import i18nENControl from "@/i18n/en/i18nControl";
 import i18nEnEnum from "@/i18n/en/i18nEnum";
-import i18nEnMenu from "@/i18n/en/system/i18nMenu";
-import i18nEnMenuFontend from "@/i18n/en/business/i18nMenuFontend";
-import i18nEnQuickLink from "@/i18n/en/business/i18nQuickLink";
-import i18nEnErrorReport from "@/i18n/en/system/i18nErrorReport";
-import i18nEnJobDefinition from "@/i18n/en/system/i18nJobDefinition";
-import i18nEnLanguage from "@/i18n/en/system/i18nLanguage";
-import i18nEnSystemConfig from "@/i18n/en/system/i18nSystemConfig";
-import i18nEnConfigNotify from "@/i18n/en/system/i18nConfigNotify";
-import i18nEnReceiveNotify from "@/i18n/en/system/i18nReceiveNotify";
+import i18nEnMenu from "@/i18n/en/sys/i18nMenu";
+import i18nEnMenuFontend from "@/i18n/en/bus/i18nMenuFontend";
+import i18nEnQuickLink from "@/i18n/en/bus/i18nQuickLink";
+import i18nEnErrorReport from "@/i18n/en/sys/i18nErrorReport";
+import i18nEnJobDefinition from "@/i18n/en/sys/i18nJobDefinition";
+import i18nEnLanguage from "@/i18n/en/sys/i18nLanguage";
+import i18nEnSystemConfig from "@/i18n/en/sys/i18nSystemConfig";
+import i18nEnConfigNotify from "@/i18n/en/sys/i18nConfigNotify";
+import i18nEnReceiveNotify from "@/i18n/en/sys/i18nReceiveNotify";
 import i18nEnValidate from "@/i18n/en/i18nValidate"; 
-import i18nEnBank from "@/i18n/en/business/i18nBank";
-import i18nEnBanner from "@/i18n/en/business/i18nBanner";
-import i18nEnFooter from "@/i18n/en/business/i18nFooter";
-import i18nEnAnoucement from "@/i18n/en/business/i18nAnoucement";
-import i18nEnDictionaryList from "@/i18n/en/system/i18nDictionaryList";
-import i18nEnDictionary from "@/i18n/en/system/i18nDictionary";
-import i18nEnNews from "@/i18n/en/business/i18nNews";
-import i18nEnNewsList from "@/i18n/en/business/i18nNewsList";
-import i18nEnDepartment from "@/i18n/en/business/i18nDepartment";
-import i18nEnSupportList from "@/i18n/en/business/i18nSupportList";
-import i18nEnPosition from "@/i18n/en/business/i18nPosition";
-import i18nEnSupport from "@/i18n/en/business/i18nSupport";
-import i18nEnContact from "@/i18n/en/business/i18nContact";
-import i18nEnKeyword from "@/i18n/en/system/i18nKeyword";
-import i18nEnCompanyInfo from "@/i18n/en/business/i18nCompanyInfo";
-import i18nEnFunctionConfig from "@/i18n/en/system/i18nFunctionConfig";
-import i18nEnProvince from "@/i18n/en/business/i18nProvince";
-import i18nEnDistrict from "@/i18n/en/business/i18nDistrict";
-import i18nEnWard from "@/i18n/en/business/i18nWard";
-import i18nEnVoucherEvent from "@/i18n/en/customer/i18nVoucherEvent";
-import i18nEnVoucher from "@/i18n/en/customer/i18nVoucher";
-import i18nEnCategory from "@/i18n/en/business/i18nCategory";
-import i18nEnMemberType from "@/i18n/en/customer/i18nMemberType";
-import i18nEnPaymentMethod from "@/i18n/en/business/i18nPaymentMethod";
-import i18nEnCustomer from "@/i18n/en/customer/i18nCustomer";
-import i18nEnEmoticon from "@/i18n/en/customer/i18nEmoticon";
-import i18nEnOrderHistory from "@/i18n/en/customer/i18nOrderHistory";
-import i18nEnRecharge from "@/i18n/en/customer/i18nRecharge";
-import i18nEnTransaction from "@/i18n/en/customer/i18nTransaction";
-import i18nEnContractTemplate from "@/i18n/en/customer/i18nContractTemplate";
-import i18nEnBrand from "@/i18n/en/business/i18nBrand";
-import i18nEnRegisterPackage from "@/i18n/en/customer/i18nRegisterPackage";
-import i18nEnProductGroup from "@/i18n/en/customer/i18nProductGroup";
-import i18nEnSupplier from "@/i18n/en/customer/i18nSupplier";
-import i18nEnFeaturePackage from "@/i18n/en/customer/i18nFeaturePackage";
-import i18nEnMembershipPlan from "@/i18n/en/customer/i18nMembershipPlan";
-import i18nEnCountry from "@/i18n/en/system/i18nCountry";
-import i18nEnStaff from "@/i18n/en/business/i18nStaff";
-import i18nEnProduct from "@/i18n/en/customer/i18nProduct";
+import i18nEnBank from "@/i18n/en/bus/i18nBank";
+import i18nEnBanner from "@/i18n/en/bus/i18nBanner";
+import i18nEnFooter from "@/i18n/en/bus/i18nFooter";
+import i18nEnAnoucement from "@/i18n/en/bus/i18nAnoucement";
+import i18nEnDictionaryList from "@/i18n/en/sys/i18nDictionaryList";
+import i18nEnDictionary from "@/i18n/en/sys/i18nDictionary";
+import i18nEnNews from "@/i18n/en/bus/i18nNews";
+import i18nEnNewsList from "@/i18n/en/bus/i18nNewsList";
+import i18nEnDepartment from "@/i18n/en/bus/i18nDepartment";
+import i18nEnSupportList from "@/i18n/en/bus/i18nSupportList";
+import i18nEnPosition from "@/i18n/en/bus/i18nPosition";
+import i18nEnSupport from "@/i18n/en/bus/i18nSupport";
+import i18nEnContact from "@/i18n/en/bus/i18nContact";
+import i18nEnKeyword from "@/i18n/en/sys/i18nKeyword";
+import i18nEnCompanyInfo from "@/i18n/en/bus/i18nCompanyInfo";
+import i18nEnFunctionConfig from "@/i18n/en/sys/i18nFunctionConfig";
+import i18nEnProvince from "@/i18n/en/bus/i18nProvince";
+import i18nEnDistrict from "@/i18n/en/bus/i18nDistrict";
+import i18nEnWard from "@/i18n/en/bus/i18nWard";
+import i18nEnVoucherEvent from "@/i18n/en/cust/i18nVoucherEvent";
+import i18nEnVoucher from "@/i18n/en/cust/i18nVoucher";
+import i18nEnCategory from "@/i18n/en/bus/i18nCategory";
+import i18nEnMemberType from "@/i18n/en/cust/i18nMemberType";
+import i18nEnPaymentMethod from "@/i18n/en/bus/i18nPaymentMethod";
+import i18nEnCustomer from "@/i18n/en/cust/i18nCustomer";
+import i18nEnEmoticon from "@/i18n/en/cust/i18nEmoticon";
+import i18nEnOrderHistory from "@/i18n/en/cust/i18nOrderHistory";
+import i18nEnRecharge from "@/i18n/en/cust/i18nRecharge";
+import i18nEnTransaction from "@/i18n/en/cust/i18nTransaction";
+import i18nEnContractTemplate from "@/i18n/en/bus/i18nContractTemplate";
+import i18nEnBrand from "@/i18n/en/bus/i18nBrand";
+import i18nEnRegisterPackage from "@/i18n/en/cust/i18nRegisterPackage";
+import i18nEnProductGroup from "@/i18n/en/cust/i18nProductGroup";
+import i18nEnSupplier from "@/i18n/en/cust/i18nSupplier";
+import i18nEnFeaturePackage from "@/i18n/en/bus/i18nFeaturePackage";
+import i18nEnMembershipPlan from "@/i18n/en/bus/i18nMembershipPlan";
+import i18nEnCountry from "@/i18n/en/sys/i18nCountry";
+import i18nEnStaff from "@/i18n/en/bus/i18nStaff";
+import i18nEnWarehouse from "@/i18n/en/cust/i18nWarehouse";
+import i18nEnProduct from "@/i18n/en/cust/i18nProduct";
+import i18nEnDataControl from "@/i18n/en/sys/i18nDataControl";
+import i18nEnChats from "@/i18n/en/cust/i18nChats";
 
+//#IMPORT_I18N_EN#
 
 export default {
   vi: {
-    i18nEmployee,
+    //#EXPORT_I18N_VI#
     i18nCommon,
     i18nControl,
     i18nEnum,
@@ -170,11 +176,14 @@ export default {
     i18nMembershipPlan,
     i18nCountry,
     i18nStaff,
-    i18nProduct
+    i18nWarehouse,
+    i18nProduct,
+    i18nDataControl,
+    i18nChats,
 
   },
   en: {
-    i18nEmployee: i18nEnEmployee,
+    //#EXPORT_I18N_EN#
     i18nCommon: i18nEnCommon,
     i18nControl: i18nENControl,
     i18nEnum: i18nEnEnum,
@@ -228,6 +237,10 @@ export default {
     i18nMembershipPlan: i18nEnMembershipPlan,
     i18nCountry: i18nEnCountry,
     i18nStaff: i18nEnStaff,
+    i18nWarehouse: i18nEnWarehouse,
     i18nProduct: i18nEnProduct,
+    i18nDataControl: i18nEnDataControl,
+    i18nChats: i18nEnChats,
+
   }
 }

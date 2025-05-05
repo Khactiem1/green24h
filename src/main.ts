@@ -16,13 +16,13 @@ import { globalComponents } from '@/commons/globalComponents';
 import errorHandler from '@/commons/errorHandler';
 import { PromiseDialog } from 'vue3-promise-dialog';
 import vClickOutSide from 'click-outside-vue3';
-import VueFroala from 'vue-froala-wysiwyg';
+import JoditVue from 'jodit-vue'
 
 //Add extension
 import '@/commons/prototype';
 
 const app = createApp(App)
-app.use(VueFroala);
+app.use(JoditVue)
 app.use(createPinia())
 app.use(router)
 app.use(i18n);

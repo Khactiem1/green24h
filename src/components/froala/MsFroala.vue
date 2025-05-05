@@ -1,39 +1,31 @@
 <template>
 	<div v-if="config" class="froala-content">
+    <input accept="image/*" @change="onImageSelected" class="separate-line-chose_image" ref="refImage" type="file">
+    <input accept="video/*" @change="onVideoSelected" class="separate-line-chose_image" ref="refVideo" type="file">
     <div class="flex-between">
       <label>{{ label }}</label>
-      <span class="file-Management" @click="opendFileManagement"> {{ $t('i18nCommon.MsFileUpload.ImageManagement') }} </span>
     </div>
-		<froala
+    <jodit-editor
       class="froala-editor"
       ref="froala"
-      :tag="'textarea'" 
+      v-model="computedValue"
       :config="config"
-      v-model:value="computedValue">
-    </froala>
-    <!-- <froalaView v-model:value="content"></froalaView> -->
+    />
   </div>
 </template>
 
 <script lang="ts">
-//Import Froala Editor 
-import 'froala-editor/js/plugins.pkgd.min.js';
-//Import third party plugins
-import 'froala-editor/js/third_party/embedly.min';
-import 'froala-editor/js/third_party/font_awesome.min';
-import 'froala-editor/js/third_party/image_tui.min';
-import 'froala-editor/js/froala_editor.pkgd.min.js';
-import 'froala-editor/js/languages/vi'; // Import file ngôn ngữ
-// Import Froala Editor css files.
-import 'froala-editor/css/froala_editor.pkgd.min.css';
-import 'froala-editor/css/froala_style.min.css';
-import 'froala-editor/css/themes/gray.min.css';
+import 'jodit/build/jodit.min.css'
+import { JoditEditor } from 'jodit-vue'
 import imageCompression from 'browser-image-compression';
-import { computed, defineComponent, getCurrentInstance, ref, onBeforeMount } from 'vue';
+import { computed, defineComponent, getCurrentInstance, ref, onMounted } from 'vue';
 import fileAPI from '@/apis/file/fileAPI';
 import popupUtil from '@/commons/popupUtil';
 
 export default defineComponent({
+  components: {
+    JoditEditor
+  },
   props: {
     /**
      * label control
@@ -44,19 +36,12 @@ export default defineComponent({
     },
 
     modelValue: {
-      type: String,
+
     },
     /**
-     * Đường dẫn hình ảnh muốn lưu
+     * Đường dẫn media muốn lưu
      */
-    pathImage: {
-      type: String,
-      default: '',
-    },
-    /**
-     * Đường dẫn video muốn lưu
-     */
-    pathVideo: {
+    pathMedia: {
       type: String,
       default: '',
     },
@@ -70,49 +55,57 @@ export default defineComponent({
     }, // Dung lượng tối video đa cho phép (ví dụ: 50MB)
   },
 	setup(props, { emit }) {
-		const { proxy } : any = getCurrentInstance();
+		const { proxy } = getCurrentInstance();
     const config = ref(null); // Config froala
+    const editorInstance = ref(null);
 
     /**
      * Mở popup trình quản lý hình ảnh
      */
-    const opendFileManagement = () => {
+    const opendFileManagement = (editor) => {
       const me = proxy;
+      editorInstance.value = editor;
       popupUtil.show('FileManagement', {
-        editor: proxy,
+        editor: me,
       });
     };
 
     /**
-     * Init config froala
+     * Insert hình ảnh
      */
-    onBeforeMount(() => {
+    const handleInsertImage = (editor) => {
       const me: any = proxy;
-      config.value = {
-        language: localStorage.getItem("Lang") ? localStorage.getItem("Lang") : 'vi',
-        placeholderText: proxy.$t('i18nCommon.EnterDocument'),
-        heightMin: 500, // Chiều cao tối thiểu 450px
-        heightMax: 500,
-        videoMaxSize: me.maxSizeVideo,
-        events: {
-          'image.beforeUpload': handleUploadImage, // Xử lý upload hình ảnh thủ công
-          'video.beforeUpload': handleUploadVideo, // Xử lý upload video thủ công
-        },
-      };
-    });
+      if(me.$refs['refImage']){
+        me.$refs['refImage'].click();
+      }
+      editorInstance.value = editor;
+    };
+
+    // Xử lý khi file được chọn
+    const onImageSelected = async (event: any) => {
+      const me: any = proxy;
+      if (event.type === 'change' && event.target.files && event.target.files.length > 0) {
+        handleUploadImage(event.target.files, (url) => {
+          if(url && editorInstance.value){
+            me.$refs['refImage'].value = null;
+            editorInstance.value.execCommand('insertImage', true, url);
+          }
+        });
+      }
+    };
 
     /**
      * Xử lý upload hình ảnh
      */
-    const handleUploadImage = function (files: File[]){
+    const handleUploadImage = function (files: File[], callBack){
       const me: any = proxy;
       if (files.length) {
         me.$ms.commonFn.mask();
         compressImage(files[0], me.maxSizeImage).then((file) => {
           if(file){
-            fileAPI.uploadFile(file, me.pathImage).then((result) => {
-              if (result?.Success && result?.Data){
-                this.image.insert(fileAPI.getFileViewUrl(result.Data));
+            fileAPI.uploadFile(file, me.pathMedia).then((result) => {
+              if (result?.Success && result?.Data && typeof callBack === 'function'){
+                callBack(fileAPI.getFileViewUrl(result.Data));
               }
             })
             .catch(error => {
@@ -129,25 +122,38 @@ export default defineComponent({
       return false; // Ngăn không cho Froala xử lý upload mặc định
     };
 
-    /**
-     * Xử lý upload video
-     */
-    const handleUploadVideo = function (files: File[]){
+    // Xử lý khi file được chọn
+    const onVideoSelected = async (event: any) => {
       const me: any = proxy;
-      if (files.length) {
-        me.$ms.commonFn.mask();
-        fileAPI.uploadFile(files[0], me.pathVideo).then((result) => {
-          if (result?.Success && result?.Data){
-            this.video.insert(`
-              <video src="${fileAPI.getFileViewUrl(result.Data)}" 
+      if (event.type === 'change' && event.target.files && event.target.files.length > 0) {
+        handleUploadVideo(event.target.files, (url) => {
+          if(url && typeof editorInstance.value?.selection?.insertHTML === 'function'){
+            me.$refs['refVideo'].value = null;
+            editorInstance.value.selection.insertHTML(`
+              <video src="${url}" 
                 width="300" 
                 height="300" 
-                controls 
-                class="fr-draggable"
+                controls
+                playsinline autoplay
               >
                 Video không thể phát. Vui lòng kiểm tra lại!
               </video>
             `);
+          }
+        });
+      }
+    };
+
+    /**
+     * Xử lý upload video
+     */
+    const handleUploadVideo = function (files: File[], callBack: Function){
+      const me: any = proxy;
+      if (files.length) {
+        me.$ms.commonFn.mask();
+        fileAPI.uploadFile(files[0], me.pathMedia).then((result) => {
+          if (result?.Success && result?.Data && typeof callBack === 'function'){
+            callBack(fileAPI.getFileViewUrl(result.Data));
           }
         })
         .catch(error => {
@@ -157,8 +163,55 @@ export default defineComponent({
           me.$ms.commonFn.unmask();
         });
       }
-      return false; // Ngăn không cho Froala xử lý upload mặc định
     };
+
+    /**
+     * Xử lý upload video
+     */
+    const handleInsertVideo = (editor) => {
+      const me: any = proxy;
+      if(me.$refs['refVideo']){
+        me.$refs['refVideo'].click();
+      }
+      editorInstance.value = editor;
+    };
+
+    /**
+     * Init config froala
+     */
+    onMounted(() => {
+      const me:any = proxy;
+      config.value = {
+        minHeight: 500, // Chiều cao tối thiểu 500px
+        removeButtons: ['image', 'video'],
+        extraButtons: [
+          {
+            name: 'insertImageCustom',
+            icon: 'image',
+            exec: (editor) => {
+              handleInsertImage(editor);
+            },
+            tooltip: 'Insert Image',
+          },
+          {
+            name: 'insertVideoCustom',
+            icon: 'video',
+            exec: (editor) => {
+              handleInsertVideo(editor);
+            },
+            tooltip: 'Insert Video',
+          },
+          {
+            name: me.$t('i18nCommon.MsFileUpload.ImageManagement'),
+            icon: 'fileManagement',
+            exec: (editor) => {
+              me.opendFileManagement(editor);
+            },
+            tooltip: me.$t('i18nCommon.MsFileUpload.ImageManagement'),
+          },
+        ],
+      };
+    });
 
     /**
      * Nén ảnh
@@ -206,12 +259,9 @@ export default defineComponent({
      */
     const computedValue = computed({
       get() {
-        return props.modelValue;
+        return props.modelValue ? props.modelValue : '';
       },
       set(value) {
-        if(value && typeof value.replace === 'function'){
-          value = value.replace('<p data-f-id="pbf" style="text-align: center; font-size: 14px; margin-top: 30px; opacity: 0.65; font-family: sans-serif;">Powered by <a href="https://www.froala.com/wysiwyg-editor?pb=1" title="Froala Editor">Froala Editor</a></p>', '');
-        }
         emit("update:modelValue", value);
       },
     });
@@ -219,6 +269,9 @@ export default defineComponent({
 		return {
       config,
       computedValue,
+      editorInstance,
+      onImageSelected,
+      onVideoSelected,
       opendFileManagement,
 		};
 	},
@@ -232,45 +285,9 @@ export default defineComponent({
   max-width: 100%;
   max-height: 100%;
 }
-:deep(.fr-box){
-  width: 100%;
-  height: 100%;
-}
-.froala-content {
-  :deep(.fr-wrapper){
-    max-height: calc(100% - 100px); /* Chiều cao tối đa cho phần soạn thảo */
-    overflow-y: auto; /* Cho phép cuộn theo trục Y */
-    overflow-x: hidden; /* Ẩn cuộn ngang */
-    height: 100%;
-    a[id="fr-logo"] {
-      display: none !important;
-    }
-    p[data-f-id="pbf"] {
-      display: none !important;
-    }
-    a[href*="www.froala.com"] {
-      display: none !important;
-    }
-  }
-  .disabled-license{
-    :deep(.fr-wrapper){
-      height: 100%;
-      div:first-of-type {
-        display: none;
-      }
-    }
-  }
-  :deep(.fr-second-toolbar){
-    #fr-logo{
-      display: none !important;
-    }
-  }
-}
-.file-Management{
-  cursor: pointer;
-  color: var(--primary__color);
-  &:hover{
-    text-decoration: underline;
-  }
+.separate-line-chose_image{
+  width: 0;
+  height: 0;
+  visibility: hidden;
 }
 </style>

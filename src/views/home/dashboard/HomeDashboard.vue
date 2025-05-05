@@ -1,13 +1,25 @@
 <template>
-  <div class="container-table">
-    <div class="container-table_header border-line-bottom">
-      <div class="name-table text-uppercase">
-        <h1>{{ $t("i18nCommon.Dashboard") }}</h1>
-      </div>
-    </div>
+  <div>
+
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script lang="ts">
+import { defineComponent, getCurrentInstance } from "vue";
 
-<style lang="scss" scoped></style>
+export default defineComponent({
+  components: {
+
+  },
+  setup: () => {
+    const { proxy } = getCurrentInstance(); // Instance của component
+
+    return {
+    }
+  }
+})
+</script>
+
+<style lang="scss" scoped>
+
+</style>

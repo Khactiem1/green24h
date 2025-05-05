@@ -1,5 +1,6 @@
 :root {
   --primary__color: #067bb1;
+  --primary__color-bg: #067bb136;
   --primary__color-hover: #068dcb;
   --primary__color-active: #068dcb;
   --primary__color-background: #dfffdb;
@@ -859,6 +860,9 @@ h6 {
 }
 .justify-space-between {
   justify-content: space-between !important;
+}
+.justify-flex-start {
+  justify-content: flex-start !important;
 }
 .justify-content-around {
   justify-content: space-around !important;

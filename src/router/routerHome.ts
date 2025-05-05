@@ -1,4 +1,5 @@
 const router: any [] = [
+  //#ROUTER#
   {
     path: '/dashboard',
     name: 'dashboard',

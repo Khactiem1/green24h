@@ -39,16 +39,16 @@
           <img style="width: 100%; height: 100%; border-radius: 50%;" :src="fileAPI.getFileViewUrl(user.avartar)" alt="">
         </div>
 
-        <div class="header-user_name text-color-primary">
+        <!-- <div class="header-user_name text-color-primary">
           {{ user.user_full_name }}
         </div>
-        <div class="header-user_icon"></div>
+        <div class="header-user_icon"></div> -->
         <ul style="min-width: 120px" class="pa-0 shadow-xl">
           <li class="flex pb-2" style="background-color: var(--primary__color)">
-            <div
-              class="image-container"
-              style="width: 40px; height: 40px"
-            ></div>
+            <div v-if="!user.avartar" class="image-container" style="width: 40px; height: 40px"></div>
+            <div class="image-user-profile" v-else style="width: 40px; height: 40px">
+              <img style="width: 100%; height: 100%; border-radius: 50%;" :src="fileAPI.getFileViewUrl(user.avartar)" alt="">
+            </div>
 
             <div class="header-user_name ml-3" style="flex-grow: 1">
               <h4
@@ -134,7 +134,7 @@
 <script lang="ts">
 import { defineComponent, getCurrentInstance, onBeforeMount, ref } from "vue";
 import popupUtil from "@/commons/popupUtil";
-import userAPI from "@/apis/system/userAPI";
+import userAPI from "@/apis/sys/usersAPI";
 import fileAPI from "@/apis/file/fileAPI";
 
 export default defineComponent({
@@ -241,6 +241,9 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 /* phần header công ty */
+img{
+  border: 1px solid #e0e0e0;
+}
 .header {
   height: var(--height__header);
   min-height: var(--height__header);
@@ -314,7 +317,6 @@ export default defineComponent({
   font-family: "notosans-semibold";
 }
 .subtitle_user {
-  font-family: Roboto;
   color: #dedede;
   font-weight: 300;
   font-size: 12px;
